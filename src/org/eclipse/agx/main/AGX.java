@@ -1,0 +1,227 @@
+package org.eclipse.agx.main;
+
+import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import org.eclipse.ui.console.ConsolePlugin;
+import org.eclipse.ui.console.IConsole;
+import org.eclipse.ui.console.IConsoleManager;
+import org.eclipse.ui.console.MessageConsole;
+import org.eclipse.ui.console.MessageConsoleStream;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.agx.Util;
+
+public class AGX extends Object {
+	
+	private Util util;
+	private String [] configuredProfilesCached = null;
+	
+	public AGX() {
+		super();
+		util = new Util();
+	}
+    
+	/*
+	 * Return generator info.
+	 * 
+	 * @param generator: path to AGX executable.
+	 */
+	public String getInfo(String generator) {
+		String ret = "Error: ?";
+		try {
+    		String command = generator + " -i";
+            Process p = Runtime.getRuntime().exec(command);
+            BufferedReader input =
+                new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line;
+            while ((line = input.readLine()) != null) {
+            	if (!line.substring(0, 3).equals("AGX")) {
+            		ret = "Error: Response not from AGX";
+            	} else {
+            		ret = line;
+            	}
+            	break;
+            }
+        } catch (Exception e) {
+        	//err.printStackTrace();
+        	ret = "Error: Interpreter not defined or invalid";
+        }
+        return ret;
+	}
+	
+	/*
+	 * Return profile names and paths known by recent AGX.
+	 * 
+	 * @param generator: path to AGX executable.
+	 */
+    public String [] getConfiguredProfiles(String generator) {
+    	if (configuredProfilesCached != null) {
+    		return configuredProfilesCached;
+    	}
+    	try {
+    		String command = generator + " -l";
+            Process p = Runtime.getRuntime().exec(command);
+            BufferedReader input =
+                new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line;
+            ArrayList<String> configuredProfiles = new ArrayList<String>(0);
+            while ((line = input.readLine()) != null) {
+            	configuredProfiles.add(line);
+            }
+            input.close();
+            
+            configuredProfilesCached = 
+            	configuredProfiles.toArray(new String[] {});
+            return configuredProfilesCached;
+        } catch (Exception e) {
+        	//err.printStackTrace();
+            return new String [] {};
+        }
+    }
+    
+    /*
+	 * Call generator.
+	 * 
+	 * @param generator: path to AGX executable.
+	 * @param model: path to model XMI
+	 * @param target path where the generated code goes
+	 * @param profiles: names of profiles to use for generation.
+	 */
+    public void generate(String generator,
+    		             String model,
+    		             String target,
+    		             String [] profiles) {
+    	MessageConsole console = getConsole();
+    	console.activate();
+		MessageConsoleStream out = console.newMessageStream();
+		Color red = new Color(null, 255, 0, 0);
+    	out.setColor(red);
+    	out.println("Start AGX");
+    	
+    	if (generator.equals("")) {
+    		out.println("Error: No generator configured");
+    		out.println("");
+    		return;
+    	}
+    	if (target.equals("")) {
+    		out.println("Error: No target configured");
+    		out.println("");
+    		return;
+    	}
+    	if (profiles.length == 0) {
+    		out.println("Error: No profiles applied");
+    		out.println("");
+    		return;
+    	}
+    	
+    	try {
+    		out.println("AGX: Read configured profiles");
+    		String [] availableProfiles = getConfiguredProfiles(generator);
+    		String [] availableProfileNames = 
+    			util.getProfileNames(availableProfiles);
+    		
+    		for (int i = 0; i < profiles.length; i++) {
+    			boolean found = false;
+    			for (int j = 0; j < availableProfileNames.length; j++) {
+    				if (profiles[i].equals(availableProfileNames[j])) {
+    					found = true;
+    				}
+    			}
+    			if (!found) {
+    				String msg = 
+    					"Error: One or more required profiles not available";
+    				out.println(msg);
+    				out.println("");
+    				return;
+    			}
+    		}
+    		
+    		String [] profilePathsArray = util.getProfilePaths(
+    			profiles, availableProfiles);
+    		
+    		String profilesConcat = "";
+    		for (int i = 0; i < profilePathsArray.length; i++) {
+    			profilesConcat += profilePathsArray[i] + " ";
+    		}
+    		String command = generator + 
+    		                 " " + model +
+    		                 " -p " + profilesConcat + 
+    		                 "-o " + target;
+    		
+    		out.println("AGX: Invoke generator");
+    		out.println("Command: '" + command + "'");
+    		out.println("");
+    		
+    		Process p = Runtime.getRuntime().exec(command);
+            BufferedReader input =
+                new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line;
+            while ((line = input.readLine()) != null) {
+            	out.println(line);
+            }
+            input.close();
+            out.println("");
+        } catch (Exception e) {
+        	out.println("Error: " + e.toString());
+        	out.println("");
+        }
+    }
+    
+    /*
+	 * Import profiles for model.
+	 * 
+	 * @param generator: path to AGX executable.
+	 * @param model: path to model XMI
+	 * @param profiles: names of profiles to import.
+	 */
+    public void importProfiles(String generator,
+                               String model,
+                               String [] profiles) {
+    	String profilesConcat = "";
+    	for (int i = 0; i < profiles.length; i++) {
+    		profilesConcat += profiles[i] + " ";
+    	}
+    	
+    	MessageConsole console = getConsole();
+    	console.activate();
+		MessageConsoleStream out = console.newMessageStream();
+		Color red = new Color(null, 255, 0, 0);
+    	out.setColor(red);
+    	out.println("Import AGX profiles");
+    	
+    	String command = generator + 
+        " " + model +
+        " -e " + profilesConcat;
+    	
+    	try {
+    		Process p = Runtime.getRuntime().exec(command);
+            BufferedReader input =
+                new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line;
+            while ((line = input.readLine()) != null) {
+            	out.println(line);
+            }
+            input.close();
+            out.println("");
+    	} catch (Exception e) {
+        	out.println("Error: " + e.toString());
+        	out.println("");
+        }
+    }
+    
+    /*
+     * Get console to write to.
+     */
+    private MessageConsole getConsole() {
+    	String name = "AGX";
+    	ConsolePlugin plugin = ConsolePlugin.getDefault();
+        IConsoleManager conMan = plugin.getConsoleManager();
+        IConsole[] existing = conMan.getConsoles();
+        for (int i = 0; i < existing.length; i++)
+           if (name.equals(existing[i].getName()))
+              return (MessageConsole) existing[i];
+        MessageConsole myConsole = new MessageConsole(name, null);
+        conMan.addConsoles(new IConsole[]{myConsole});
+        return myConsole;
+     }
+}

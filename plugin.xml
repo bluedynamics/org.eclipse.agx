@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            name="AGX Properties"
+            nameFilter="*.uml"
+            class="org.eclipse.agx.properties.AGXProperties"
+            id="org.eclipse.agx.properties.AGXPropertyPage">
+         <enabledWhen>
+            <instanceof
+                  value="org.eclipse.core.resources.IFile">
+            </instanceof>
+         </enabledWhen>
+      </page>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            id="org.eclipse.agx.menu.contribution1"
+            nameFilter="*.uml"
+            objectClass="org.eclipse.core.resources.IFile">
+         <menu
+               label="AGX"
+               path="additions"
+               id="org.eclipse.agx.menu.menu1">
+            <separator
+                  name="group1">
+            </separator>
+         </menu>
+         <action
+               label="generate"
+               class="org.eclipse.agx.menu.GenerateAction"
+               menubarPath="org.eclipse.agx.menu.menu1/group1"
+               enablesFor="1"
+               id="org.eclipse.agx.menu.generateAction">
+         </action>
+         <action
+               label="import profiles"
+               class="org.eclipse.agx.menu.ImportProfilesAction"
+               menubarPath="org.eclipse.agx.menu.menu1/group1"
+               enablesFor="1"
+               id="org.eclipse.agx.menu.importProfilesAction">
+         </action>
+      </objectContribution>
+   </extension>
+
+</plugin>
