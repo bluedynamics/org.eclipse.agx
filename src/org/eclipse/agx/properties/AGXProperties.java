@@ -19,9 +19,9 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.dialogs.PropertyPage;
-import org.eclipse.agx.Util;
 import org.eclipse.agx.main.AGX;
 import org.eclipse.agx.main.Config;
+import org.eclipse.agx.main.Util;
 
 public class AGXProperties extends PropertyPage {
 	

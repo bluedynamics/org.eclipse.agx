@@ -1,4 +1,4 @@
-package org.eclipse.agx;
+package org.eclipse.agx.main;
 
 import java.io.IOException;
 import java.util.ArrayList;

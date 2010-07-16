@@ -9,7 +9,6 @@ import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.agx.Util;
 
 public class AGX extends Object {
 	
@@ -63,8 +62,8 @@ public class AGX extends Object {
             Process p = Runtime.getRuntime().exec(command);
             BufferedReader input =
                 new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String line;
             ArrayList<String> configuredProfiles = new ArrayList<String>(0);
+            String line;
             while ((line = input.readLine()) != null) {
             	configuredProfiles.add(line);
             }
@@ -155,10 +154,17 @@ public class AGX extends Object {
     		Process p = Runtime.getRuntime().exec(command);
             BufferedReader input =
                 new BufferedReader(new InputStreamReader(p.getInputStream()));
+            BufferedReader error =
+                new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            
             String line;
             while ((line = input.readLine()) != null) {
             	out.println(line);
             }
+            while ((line = error.readLine()) != null) {
+            	out.println(line);
+            }
+            
             input.close();
             out.println("");
         } catch (Exception e) {
