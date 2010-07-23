@@ -381,12 +381,12 @@ public class AGXProperties extends PropertyPage {
 	
 	public boolean performOk() {
 		try {
-			agxInfoLabel.setText(agx.getInfo(config.getGenerator()));
-			
 			config.setTarget(targetText.getText());
 			config.setGenerator(generatorText.getText());
 			config.setProfiles(profilesList.getItems());
 			config.update();
+			
+			agxInfoLabel.setText(agx.getInfo(generatorText.getText()));
 			
 			//URI modelUri = URI.createURI(resource.getLocation().toString());
 			//org.eclipse.uml2.uml.Package model = util.loadModel(modelUri);
