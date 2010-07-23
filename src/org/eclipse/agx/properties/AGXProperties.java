@@ -37,6 +37,7 @@ public class AGXProperties extends PropertyPage {
 	private static final int LIST_FIELD_WIDTH = 30;
 
 	// property widgets
+	private Label agxInfoLabel;
 	private Text targetText;
 	private Text generatorText;
 	private List availableProfilesList;
@@ -171,8 +172,8 @@ public class AGXProperties extends PropertyPage {
 	private void addGeneratorSection(Composite parent) {
 		String generator = config.getGenerator();
 		
-		Label profilesLabel = new Label(parent, SWT.NONE);
-		profilesLabel.setText(agx.getInfo(generator));
+		agxInfoLabel = new Label(parent, SWT.NONE);
+		agxInfoLabel.setText(agx.getInfo(generator));
 		
 		Composite composite = createColComposite(parent);
 		
@@ -380,6 +381,8 @@ public class AGXProperties extends PropertyPage {
 	
 	public boolean performOk() {
 		try {
+			agxInfoLabel.setText(agx.getInfo(config.getGenerator()));
+			
 			config.setTarget(targetText.getText());
 			config.setGenerator(generatorText.getText());
 			config.setProfiles(profilesList.getItems());

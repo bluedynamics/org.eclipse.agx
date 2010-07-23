@@ -29,9 +29,13 @@ public class AGX extends Object {
 		String ret = "Error: ?";
 		try {
     		String command = generator + " -i";
+    		
             Process p = Runtime.getRuntime().exec(command);
             BufferedReader input =
                 new BufferedReader(new InputStreamReader(p.getInputStream()));
+            BufferedReader error =
+                new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            
             String line;
             while ((line = input.readLine()) != null) {
             	if (!line.substring(0, 3).equals("AGX")) {
@@ -41,9 +45,22 @@ public class AGX extends Object {
             	}
             	break;
             }
+            MessageConsoleStream out = null;
+            while ((line = error.readLine()) != null) {
+            	if (out == null) {
+            		MessageConsole console = getConsole();
+            		out = console.newMessageStream();
+            		Color red = new Color(null, 255, 0, 0);
+                	out.setColor(red);
+            	}
+            	out.println(line);
+            }
+            
+            input.close();
+            error.close();
         } catch (Exception e) {
         	//err.printStackTrace();
-        	ret = "Error: Interpreter not defined or invalid";
+        	ret = "Error: Invalid Interpreter";
         }
         return ret;
 	}
@@ -59,14 +76,30 @@ public class AGX extends Object {
     	}
     	try {
     		String command = generator + " -l";
+    		
             Process p = Runtime.getRuntime().exec(command);
             BufferedReader input =
                 new BufferedReader(new InputStreamReader(p.getInputStream()));
+            BufferedReader error =
+                new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            
             ArrayList<String> configuredProfiles = new ArrayList<String>(0);
             String line;
             while ((line = input.readLine()) != null) {
             	configuredProfiles.add(line);
             }
+            MessageConsoleStream out = null;
+            while ((line = error.readLine()) != null) {
+            	if (out == null) {
+            		MessageConsole console = getConsole();
+            		out = console.newMessageStream();
+            		Color red = new Color(null, 255, 0, 0);
+                	out.setColor(red);
+            	}
+            	out.println(line);
+            }
+            
+            error.close();
             input.close();
             
             configuredProfilesCached = 
@@ -142,13 +175,14 @@ public class AGX extends Object {
     		for (int i = 0; i < profilePathsArray.length; i++) {
     			profilesConcat += profilePathsArray[i] + " ";
     		}
+    		
     		String command = generator + 
     		                 " " + model +
     		                 " -p " + profilesConcat + 
     		                 "-o " + target;
     		
     		out.println("AGX: Invoke generator");
-    		out.println("Command: '" + command + "'");
+    		out.println("Command: " + command);
     		out.println("");
     		
     		Process p = Runtime.getRuntime().exec(command);
@@ -166,6 +200,7 @@ public class AGX extends Object {
             }
             
             input.close();
+            error.close();
             out.println("");
         } catch (Exception e) {
         	out.println("Error: " + e.toString());
@@ -185,7 +220,10 @@ public class AGX extends Object {
                                String [] profiles) {
     	String profilesConcat = "";
     	for (int i = 0; i < profiles.length; i++) {
-    		profilesConcat += profiles[i] + " ";
+    		profilesConcat += profiles[i];
+    		if (i != profiles.length - 1) {
+    			profilesConcat += " ";
+    		}
     	}
     	
     	MessageConsole console = getConsole();
@@ -193,21 +231,32 @@ public class AGX extends Object {
 		MessageConsoleStream out = console.newMessageStream();
 		Color red = new Color(null, 255, 0, 0);
     	out.setColor(red);
-    	out.println("Import AGX profiles");
     	
     	String command = generator + 
         " " + model +
-        " -e " + profilesConcat;
+        " -e '" + profilesConcat + "'";
+    	
+    	out.println("AGX: Import profiles");
+		out.println("Command: " + command);
+		out.println("");
     	
     	try {
     		Process p = Runtime.getRuntime().exec(command);
             BufferedReader input =
                 new BufferedReader(new InputStreamReader(p.getInputStream()));
+            BufferedReader error =
+                new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            
             String line;
             while ((line = input.readLine()) != null) {
             	out.println(line);
             }
+            while ((line = error.readLine()) != null) {
+            	out.println(line);
+            }
+            
             input.close();
+            error.close();
             out.println("");
     	} catch (Exception e) {
         	out.println("Error: " + e.toString());
