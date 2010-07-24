@@ -125,23 +125,33 @@ public class AGX extends Object {
     		             String [] profiles) {
     	MessageConsole console = getConsole();
     	console.activate();
-		MessageConsoleStream out = console.newMessageStream();
+    	
+    	MessageConsoleStream out = console.newMessageStream();
+		Color black = new Color(null, 0, 0, 0);
+		out.setColor(black);
+		
+		MessageConsoleStream info = console.newMessageStream();
+		Color green = new Color(null, 0, 200, 0);
+		info.setColor(green);
+		
+		MessageConsoleStream err = console.newMessageStream();
 		Color red = new Color(null, 255, 0, 0);
-    	out.setColor(red);
+    	err.setColor(red);
+    	
     	out.println("Start AGX");
     	
     	if (generator.equals("")) {
-    		out.println("Error: No generator configured");
+    		err.println("Error: No generator configured");
     		out.println("");
     		return;
     	}
     	if (target.equals("")) {
-    		out.println("Error: No target configured");
+    		err.println("Error: No target configured");
     		out.println("");
     		return;
     	}
     	if (profiles.length == 0) {
-    		out.println("Error: No profiles applied");
+    		err.println("Error: No profiles applied");
     		out.println("");
     		return;
     	}
@@ -162,7 +172,7 @@ public class AGX extends Object {
     			if (!found) {
     				String msg = 
     					"Error: One or more required profiles not available";
-    				out.println(msg);
+    				err.println(msg);
     				out.println("");
     				return;
     			}
@@ -195,17 +205,17 @@ public class AGX extends Object {
             
             String line;
             while ((line = input.readLine()) != null) {
-            	out.println(line);
+            	info.println(line);
             }
             while ((line = error.readLine()) != null) {
-            	out.println(line);
+            	err.println(line);
             }
             
             input.close();
             error.close();
             out.println("");
         } catch (Exception e) {
-        	out.println("Error: " + e.toString());
+        	err.println("Error: " + e.toString());
         	out.println("");
         }
     }
@@ -230,9 +240,19 @@ public class AGX extends Object {
     	
     	MessageConsole console = getConsole();
     	console.activate();
-		MessageConsoleStream out = console.newMessageStream();
+		
+    	MessageConsoleStream out = console.newMessageStream();
+		Color black = new Color(null, 0, 0, 0);
+		out.setColor(black);
+		
+		MessageConsoleStream info = console.newMessageStream();
+		Color green = new Color(null, 0, 200, 0);
+		info.setColor(green);
+		
+		MessageConsoleStream err = console.newMessageStream();
 		Color red = new Color(null, 255, 0, 0);
-    	out.setColor(red);
+    	err.setColor(red);
+    	
     	out.println("Start AGX");
     	
     	String command = generator + 
@@ -251,17 +271,17 @@ public class AGX extends Object {
             
             String line;
             while ((line = input.readLine()) != null) {
-            	out.println(line);
+            	info.println(line);
             }
             while ((line = error.readLine()) != null) {
-            	out.println(line);
+            	err.println(line);
             }
             
             input.close();
             error.close();
             out.println("");
     	} catch (Exception e) {
-        	out.println("Error: " + e.toString());
+        	err.println("Error: " + e.toString());
         	out.println("");
         }
     }
