@@ -331,15 +331,14 @@ public class AGXProperties extends PropertyPage {
     public void importProfilesListener(Button button) {
     	Listener listener = new Listener() {
 	    	public void handleEvent(Event event) {
-	    		int [] selectedItems = 
-	    			profilesList.getSelectionIndices();
-	    		if (selectedItems.length == 0) {
+	    		String [] profileNames = 
+	    			profilesList.getItems();
+	    		if (profileNames.length == 0) {
 	    			return;
 	    		}
-	    		
 	    		agx.importProfiles(generatorText.getText(),
 			 			           getSource(),
-			 			           profilesList.getItems());
+			 			           profileNames);
 	    	}
 	    };
 	    button.addListener(SWT.Selection, listener);

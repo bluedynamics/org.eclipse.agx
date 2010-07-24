@@ -173,17 +173,19 @@ public class AGX extends Object {
     		
     		String profilesConcat = "";
     		for (int i = 0; i < profilePathsArray.length; i++) {
-    			profilesConcat += profilePathsArray[i] + " ";
+    			profilesConcat += profilePathsArray[i];
+    			if (i != profilePathsArray.length - 1) {
+        			profilesConcat += ";";
+        		}
     		}
     		
     		String command = generator + 
     		                 " " + model +
-    		                 " -p " + profilesConcat + 
-    		                 "-o " + target;
+    		                 " -p " + profilesConcat +
+    		                 " -o " + target;
     		
     		out.println("AGX: Invoke generator");
     		out.println("Command: " + command);
-    		out.println("");
     		
     		Process p = Runtime.getRuntime().exec(command);
             BufferedReader input =
@@ -222,7 +224,7 @@ public class AGX extends Object {
     	for (int i = 0; i < profiles.length; i++) {
     		profilesConcat += profiles[i];
     		if (i != profiles.length - 1) {
-    			profilesConcat += " ";
+    			profilesConcat += ";";
     		}
     	}
     	
@@ -231,14 +233,14 @@ public class AGX extends Object {
 		MessageConsoleStream out = console.newMessageStream();
 		Color red = new Color(null, 255, 0, 0);
     	out.setColor(red);
+    	out.println("Start AGX");
     	
     	String command = generator + 
         " " + model +
-        " -e '" + profilesConcat + "'";
+        " -e " + profilesConcat;
     	
     	out.println("AGX: Import profiles");
 		out.println("Command: " + command);
-		out.println("");
     	
     	try {
     		Process p = Runtime.getRuntime().exec(command);
