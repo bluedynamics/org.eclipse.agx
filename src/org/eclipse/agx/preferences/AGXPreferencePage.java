@@ -5,11 +5,14 @@ import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.agx.Activator;
+import org.eclipse.agx.main.AGX;
 
 
 public class AGXPreferencePage
 	extends FieldEditorPreferencePage
 	implements IWorkbenchPreferencePage {
+	
+	private AGX agx;
 	
 	private FileFieldEditor generatorExecuableEditor;
 	private StringFieldEditor generationTargetEditor;
@@ -18,6 +21,7 @@ public class AGXPreferencePage
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("AGX Preferences");
+		agx = new AGX();
 	}
 	
 	public void createFieldEditors() {
@@ -37,13 +41,15 @@ public class AGXPreferencePage
 	
 	protected void checkState() {
         super.checkState();
-        
-        if (generatorExecuableEditor.getStringValue() == null ||
-           !generatorExecuableEditor.getStringValue().equals("")) {
+        String generator = generatorExecuableEditor.getStringValue();
+        String info = agx.getInfo(generator);
+        if (generator == null ||
+           !generator.equals("")) {
+        	setMessage(info);
         	setErrorMessage(null);
             setValid(true);
         } else {
-            setErrorMessage("Message if choosen Generator is valid here");
+            setErrorMessage(info);
             setValid(false);
         }
     }
