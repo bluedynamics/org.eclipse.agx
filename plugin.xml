@@ -47,5 +47,19 @@
          </action>
       </objectContribution>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.eclipse.agx.preferences.AGXPreferencePage"
+            id="org.eclipse.agx.preferences.AGXPreferencePage"
+            name="AGX">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.agx.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
 
 </plugin>
