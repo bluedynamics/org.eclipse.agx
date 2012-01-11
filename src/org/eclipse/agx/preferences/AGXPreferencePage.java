@@ -26,7 +26,7 @@ public class AGXPreferencePage
 	public AGXPreferencePage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("A demonstration of a preference page implementation");
+		setDescription("AGX Preferences");
 	}
 	
 	/**
@@ -36,23 +36,22 @@ public class AGXPreferencePage
 	 * restore itself.
 	 */
 	public void createFieldEditors() {
-		addField(new DirectoryFieldEditor(PreferenceConstants.P_PATH, 
-				"&Directory preference:", getFieldEditorParent()));
+		addField(new FileFieldEditor(PreferenceConstants.P_PATH, 
+				"&AGX Executable:", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_STRING,
+				"&Default Generation Target:", getFieldEditorParent()));
+		
+		// XXX: read from available profiles
 		addField(
 			new BooleanFieldEditor(
 				PreferenceConstants.P_BOOLEAN,
-				"&An example of a boolean preference",
+				"&Pyegg",
 				getFieldEditorParent()));
-
-		addField(new RadioGroupFieldEditor(
-				PreferenceConstants.P_CHOICE,
-			"An example of a multiple-choice preference",
-			1,
-			new String[][] { { "&Choice 1", "choice1" }, {
-				"C&hoice 2", "choice2" }
-		}, getFieldEditorParent()));
 		addField(
-			new StringFieldEditor(PreferenceConstants.P_STRING, "A &text preference:", getFieldEditorParent()));
+			new BooleanFieldEditor(
+				PreferenceConstants.P_BOOLEAN,
+				"&ZCA",
+				getFieldEditorParent()));
 	}
 
 	/* (non-Javadoc)
