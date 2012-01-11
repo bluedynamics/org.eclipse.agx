@@ -1,6 +1,7 @@
 package org.eclipse.agx.preferences;
 
 import org.eclipse.jface.preference.*;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.agx.Activator;
@@ -36,14 +37,22 @@ public class AGXPreferencePage
 	
 	protected void checkState() {
         super.checkState();
-        if (generatorExecuableEditor.getStringValue() != null &&
-          !generatorExecuableEditor.getStringValue().equals("")) {
-            setErrorMessage(null);
+        
+        if (generatorExecuableEditor.getStringValue() == null ||
+           !generatorExecuableEditor.getStringValue().equals("")) {
+        	setErrorMessage(null);
             setValid(true);
         } else {
-            setErrorMessage("Folder name cannot be blank!");
+            setErrorMessage("Message if choosen Generator is valid here");
             setValid(false);
         }
+    }
+	
+	public void propertyChange(PropertyChangeEvent event) {
+        super.propertyChange(event);
+        if (event.getProperty().equals(FieldEditor.VALUE)) {
+            checkState();
+        }        
     }
 
 	/* (non-Javadoc)
