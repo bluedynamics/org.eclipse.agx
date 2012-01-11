@@ -5,23 +5,13 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.agx.Activator;
 
-/**
- * This class represents a preference page that
- * is contributed to the Preferences dialog. By 
- * subclassing <samp>FieldEditorPreferencePage</samp>, we
- * can use the field support built into JFace that allows
- * us to create a page that is small and knows how to 
- * save, restore and apply itself.
- * <p>
- * This page is used to modify preferences only. They
- * are stored in the preference store that belongs to
- * the main plug-in class. That way, preferences can
- * be accessed directly via the preference store.
- */
 
 public class AGXPreferencePage
 	extends FieldEditorPreferencePage
 	implements IWorkbenchPreferencePage {
+	
+	private FileFieldEditor generatorExecuableEditor;
+	private StringFieldEditor generationTargetEditor;
 
 	public AGXPreferencePage() {
 		super(GRID);
@@ -29,30 +19,32 @@ public class AGXPreferencePage
 		setDescription("AGX Preferences");
 	}
 	
-	/**
-	 * Creates the field editors. Field editors are abstractions of
-	 * the common GUI blocks needed to manipulate various types
-	 * of preferences. Each field editor knows how to save and
-	 * restore itself.
-	 */
 	public void createFieldEditors() {
-		addField(new FileFieldEditor(PreferenceConstants.P_PATH, 
-				"&AGX Executable:", getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.P_STRING,
-				"&Default Generation Target:", getFieldEditorParent()));
+		generatorExecuableEditor = new FileFieldEditor(
+			PreferenceConstants.P_PATH, 
+			"&AGX Executable:",
+			getFieldEditorParent());
 		
-		// XXX: read from available profiles
-		addField(
-			new BooleanFieldEditor(
-				PreferenceConstants.P_BOOLEAN,
-				"&Pyegg",
-				getFieldEditorParent()));
-		addField(
-			new BooleanFieldEditor(
-				PreferenceConstants.P_BOOLEAN,
-				"&ZCA",
-				getFieldEditorParent()));
+		generationTargetEditor = new StringFieldEditor(
+			PreferenceConstants.P_STRING,
+			"&Default Generation Target:",
+			getFieldEditorParent());
+		
+		addField(generatorExecuableEditor);
+		addField(generationTargetEditor);
 	}
+	
+	protected void checkState() {
+        super.checkState();
+        if (generatorExecuableEditor.getStringValue() != null &&
+          !generatorExecuableEditor.getStringValue().equals("")) {
+            setErrorMessage(null);
+            setValid(true);
+        } else {
+            setErrorMessage("Folder name cannot be blank!");
+            setValid(false);
+        }
+    }
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
