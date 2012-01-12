@@ -26,12 +26,12 @@ public class AGXPreferencePage
 	
 	public void createFieldEditors() {
 		generatorExecuableEditor = new FileFieldEditor(
-			PreferenceConstants.P_PATH, 
+			PreferenceConstants.P_EXECUTABLE, 
 			"&AGX Executable:",
 			getFieldEditorParent());
 		
 		generationTargetEditor = new StringFieldEditor(
-			PreferenceConstants.P_STRING,
+			PreferenceConstants.P_TARGET,
 			"&Default Generation Target:",
 			getFieldEditorParent());
 		
