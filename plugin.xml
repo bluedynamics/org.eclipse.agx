@@ -61,5 +61,27 @@
             class="org.eclipse.agx.preferences.PreferenceInitializer">
       </initializer>
    </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="org.eclipse.agx"
+            name="AGX">
+      </category>
+      <wizard
+            category="org.eclipse.agx"
+            class="org.eclipse.agx.wizards.AGXModelWizard"
+            icon="icons/sample.gif"
+            id="org.eclipse.agx.wizards.AGXModelWizard"
+            name="AGX Model">
+      </wizard>
+      <wizard
+            category="org.eclipse.agx"
+            class="org.eclipse.agx.wizards.AGXProjectWizard"
+            icon="icons/sample.gif"
+            id="org.eclipse.agx.wizards.AGXProjectWizard"
+            name="AGX Project"
+            project="true">
+      </wizard>
+   </extension>
 
 </plugin>
