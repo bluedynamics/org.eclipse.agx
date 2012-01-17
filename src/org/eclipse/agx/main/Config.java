@@ -6,6 +6,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.agx.Activator;
+import org.eclipse.agx.preferences.PreferenceConstants;
 
 public class Config extends Object {
 	
@@ -38,7 +41,10 @@ public class Config extends Object {
 	}
 	
 	public String getGenerator() {
-		String generator = properties.getProperty("generator", "");
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		String defaultGenerator = 
+			store.getString(PreferenceConstants.P_EXECUTABLE);
+		String generator = properties.getProperty("generator", defaultGenerator);
 		return generator;
 	}
 	
@@ -47,7 +53,10 @@ public class Config extends Object {
 	}
 	
 	public String getTarget() {
-		String target = properties.getProperty("target", "");
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		String defaultTarget = 
+			store.getString(PreferenceConstants.P_TARGET);
+		String target = properties.getProperty("target", defaultTarget);
 		return target;
 	}
 	
