@@ -70,14 +70,14 @@
       <wizard
             category="org.eclipse.agx"
             class="org.eclipse.agx.wizards.AGXModelWizard"
-            icon="icons/sample.gif"
+            icon="icons/agx_icon.png"
             id="org.eclipse.agx.wizards.AGXModelWizard"
             name="AGX Model">
       </wizard>
       <wizard
             category="org.eclipse.agx"
             class="org.eclipse.agx.wizards.AGXProjectWizard"
-            icon="icons/sample.gif"
+            icon="icons/agx_icon.png"
             id="org.eclipse.agx.wizards.AGXProjectWizard"
             name="AGX Project"
             project="true">
