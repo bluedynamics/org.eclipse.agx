@@ -11,6 +11,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.eclipse.agx.Activator;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -18,16 +19,22 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.common.util.WrappedException;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.ui.dialogs.WizardNewFolderMainPage;
+import org.eclipse.uml2.uml.Model;
+import org.eclipse.uml2.uml.Package;
+import org.eclipse.uml2.uml.Profile;
 import org.eclipse.uml2.uml.UMLPackage;
 
 import com.sun.xml.internal.ws.util.StringUtils;
@@ -36,6 +43,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
+import org.eclipse.emf.common.util.URI;
 
 //import org.eclipse.papyrus.umlutils.PackageUtil;
 
@@ -100,7 +108,7 @@ public class Util {
 		return profilePaths.toArray(new String [] {});
 	}
 	
-	public org.eclipse.uml2.uml.Package loadModel(URI uri) {
+	public static org.eclipse.uml2.uml.Package loadPackage(URI uri) {
         org.eclipse.uml2.uml.Package package_ = null;
         try {
              Resource resource = RESOURCE_SET.getResource(uri, true);
@@ -111,7 +119,19 @@ public class Util {
         }
         return package_;
     }
-	
+
+	public static org.eclipse.uml2.uml.Model loadModel(URI uri) {
+        org.eclipse.uml2.uml.Package model = null;
+        try {
+             Resource resource = RESOURCE_SET.getResource(uri, true);
+        	 model = (org.eclipse.uml2.uml.Model) EcoreUtil.getObjectByType(
+        	             resource.getContents(), UMLPackage.Literals.MODEL);
+        } catch (WrappedException we) {
+             //err(we.getMessage());
+        }
+        return (Model) model;
+    }
+
 	public void saveModel(org.eclipse.uml2.uml.Package package_, URI uri) {
         Resource resource = new ResourceSetImpl().createResource(uri);
         resource.getContents().add(package_);
@@ -173,5 +193,29 @@ public class Util {
 			IFile file = container.getFile(fname);
 			file.create(fstream, 1, monitor);
 		}
+		applyProfile(container,"model.uml","pyegg.profile.uml");
+	}
+	
+	public static void applyProfile(IContainer container,String modelpath, String profilepath) throws IOException{
+		ResourceSetImpl RESOURCE_SET = new ResourceSetImpl();
+		
+		IFile file = container.getFile(new Path(modelpath));
+		URI uri1 = URI.createURI(file.getFullPath().toOSString());
+		Model model = loadModel(uri1);
+		Resource resource = RESOURCE_SET.getResource(uri1, true);
+
+//		URL modelURL = FileLocator.find(Activator.getDefault().getBundle(), new Path(profilepath), null);
+//		modelURL = FileLocator.toFileURL(modelURL);
+
+		file = container.getFile(new Path(profilepath));
+		URI uri = URI.createURI(file.getFullPath().toOSString());
+
+		Resource profresource = RESOURCE_SET.getResource(uri, true);
+		Profile profile = (Profile) EcoreUtil.getObjectByType(profresource.getContents(), UMLPackage.Literals.PACKAGE);
+
+		model.applyProfile(profile);
+		
+			
+		resource.save(null);
 	}
 }

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<uml:Model xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xmi:id="_qjWWIT7KEeGBdrf1rPFWaw" name="model">
-  <packagedElement xmi:type="uml:Package" xmi:id="_9RugAEsvEeGwPNkavjldyw" name="Package0">
-    <packagedElement xmi:type="uml:Class" xmi:id="_AUqskEswEeGwPNkavjldyw" name="Class0"/>
-  </packagedElement>
-</uml:Model>
+<xmi:XMI xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:pyegg="http:///schemas/pyegg/_m3LEwPJqEeC2FJWWHfGcuA/17" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xsi:schemaLocation="http:///schemas/pyegg/_m3LEwPJqEeC2FJWWHfGcuA/17 ../Python project/pyegg.profile.uml#_m3OIEPJqEeC2FJWWHfGcuA">
+  <uml:Model xmi:id="_qjWWIT7KEeGBdrf1rPFWaw" name="model">
+    <packagedElement xmi:type="uml:Package" xmi:id="_9RugAEsvEeGwPNkavjldyw" name="Package0">
+      <packagedElement xmi:type="uml:Class" xmi:id="_AUqskEswEeGwPNkavjldyw" name="Class0"/>
+    </packagedElement>
+  </uml:Model>
+</xmi:XMI>
