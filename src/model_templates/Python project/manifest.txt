@@ -1,3 +1,5 @@
 model.di
 model.notation
 model.uml
+model.uml.agx
+pyegg.profile.uml

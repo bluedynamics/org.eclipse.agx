@@ -130,7 +130,7 @@ public class AGXModelWizard extends Wizard implements INewWizard {
 		final IFile file = container.getFile(new Path(fileName));
 
 		String template = page.templateName;
-		Util.copyModel("dexterity", container, fileName, monitor);
+		Util.copyModel(template, container, fileName, monitor);
 
 		monitor.worked(1);
 		monitor.setTaskName("Opening file for editing...");

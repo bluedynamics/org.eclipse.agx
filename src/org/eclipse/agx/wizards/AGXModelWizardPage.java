@@ -123,12 +123,13 @@ public class AGXModelWizardPage extends WizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				dialogChanged();
-				templateName=e.text;
+				templateName=modelType.getSelection()[0];
 			}
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
+				templateName=modelType.getSelection()[0];
 				
 			}
 		});

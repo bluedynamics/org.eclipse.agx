@@ -32,6 +32,10 @@ import org.eclipse.uml2.uml.UMLPackage;
 
 import com.sun.xml.internal.ws.util.StringUtils;
 
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+
 
 //import org.eclipse.papyrus.umlutils.PackageUtil;
 
@@ -157,19 +161,17 @@ public class Util {
 		
 		IPath fpath = new Path(targetpath);
 		
-		IFolder f=container.getFolder(fpath);
-		f.create(true,true,monitor);
-		IFolder modelfolder = container.getFolder(fpath);
+//		IFolder f=container.getFolder(fpath);
+//		f.create(true,true,monitor);
+//		IFolder modelfolder = container.getFolder(fpath);
 		while(it.hasNext()){
-			String fname = it.next();
+			IPath fname = new Path(it.next());
 			String filepath = MODEL_ROOT+path+"/"+fname;
 			InputStream fstream = Util.class.getResourceAsStream(filepath);
 			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
-			IFile file = modelfolder.getFile(fname);
-			file.create(fstream, 1, monitor);                          
-			
+			IFile file = container.getFile(fname);
+			file.create(fstream, 1, monitor);
 		}
-		
 	}
 }
