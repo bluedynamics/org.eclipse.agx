@@ -1,0 +1,5 @@
+#---AGX Properties---
+#Tue Jan 17 23:19:13 CET 2012
+profiles=pyegg
+target=.
+generator=/Users/phil/dev/projects/agx.dev/bin/agx
