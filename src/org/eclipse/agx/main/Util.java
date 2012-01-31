@@ -196,22 +196,20 @@ public class Util {
 		Iterator<String> it = filenames.iterator();
 		// create the new directory
 
-		IPath fpath = new Path(targetpath);
+		String modelname = "model.uml".replace("model", targetpath);
 
-		// IFolder f=container.getFolder(fpath);
-		// f.create(true,true,monitor);
-		// IFolder modelfolder = container.getFolder(fpath);
 		while (it.hasNext()) {
-			IPath fname = new Path(it.next());
-			String filepath = MODEL_ROOT + path + "/" + fname;
+			String fname = it.next();
+			IPath inpath = new Path(fname);
+			String filepath = MODEL_ROOT + path + "/" + inpath;
 			InputStream fstream = Util.class.getResourceAsStream(filepath);
 			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
-			IFile file = container.getFile(fname);
-			file.create(fstream, 1, monitor);
+			IFile outfile = container.getFile(new Path(fname.replace("model", targetpath)));
+			outfile.create(fstream, 1, monitor);
 		}
-		applyProfiles(container,"model.uml");
-		applyProfile(container, "model.uml", "pyegg.profile.uml");
+		applyProfiles(container,modelname);
+//		applyProfile(container, "model.uml", "pyegg.profile.uml");
 	}
 
 	public static void applyProfiles(IContainer container, String modelpath) throws IOException{
@@ -225,10 +223,18 @@ public class Util {
 		//conf.update();
 		AGX agx=new AGX();
 		agx.importProfiles(generator, modelfullpath, profiles);
+		
+		//and now apply the profiles
+		String[] profilepaths = new String[profiles.length];
+		for (int i=0;i<profiles.length;i++){
+			profilepaths[i]=profiles[i]+".profile.uml";
+		}
+		applyProfile(container, modelpath, profilepaths);
+
 	}
 
 	public static void applyProfile(IContainer container, String modelpath,
-			String profilepath) throws IOException {
+			String[] profilepaths) throws IOException {
 		ResourceSetImpl RESOURCE_SET = new ResourceSetImpl();
 
 		IFile file = container.getFile(new Path(modelpath));
@@ -238,18 +244,21 @@ public class Util {
 		Model model = getModel(resource);
 //		Package pack = loadPackage(uri1);
 
-		//retrueve uri for the profile model
-		file = container.getFile(new Path(profilepath));
-		URI uri = URI.createURI(file.getFullPath().toOSString());
-
+		//retrieve uri for the profile model
+		for(int i=0;i<profilepaths.length;i++){
+			String profilepath = profilepaths[i];
+			file = container.getFile(new Path(profilepath));
+			URI uri = URI.createURI(file.getFullPath().toOSString());
+	
+			
+			//extract the profile
+			Resource profresource = RESOURCE_SET.getResource(uri, true);
+			Profile profile = (Profile) EcoreUtil.getObjectByType(
+					profresource.getContents(), UMLPackage.Literals.PACKAGE);
+	
+			model.applyProfile(profile);
+		}
 		
-		//extract the profile
-		Resource profresource = RESOURCE_SET.getResource(uri, true);
-		Profile profile = (Profile) EcoreUtil.getObjectByType(
-				profresource.getContents(), UMLPackage.Literals.PACKAGE);
-
-		model.applyProfile(profile);
-
 		resource.setModified(true);
 		resource.save(null); //save doesnt work, so we must save as over same file
 
