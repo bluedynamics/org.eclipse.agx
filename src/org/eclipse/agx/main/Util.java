@@ -128,10 +128,21 @@ public class Util {
 		model = (org.eclipse.uml2.uml.Model) EcoreUtil.getObjectByType(
 				resource.getContents(), UMLPackage.Literals.MODEL);
 		
+		
 		resource.unload();
 		return (Model) model;
 	}
 
+	public static org.eclipse.uml2.uml.Model getModel(Resource resource) {
+		org.eclipse.uml2.uml.Package model = null;
+		model = (org.eclipse.uml2.uml.Model) EcoreUtil.getObjectByType(
+				resource.getContents(), UMLPackage.Literals.MODEL);
+		
+		
+		return (Model) model;
+	}
+
+	
 	public void saveModel(org.eclipse.uml2.uml.Model model, URI uri) {
 		Resource resource = new ResourceSetImpl().createResource(uri);
 		resource.getContents().add(model);
@@ -222,9 +233,10 @@ public class Util {
 
 		IFile file = container.getFile(new Path(modelpath));
 		URI uri1 = URI.createURI(file.getFullPath().toOSString());
-		Model model = loadModel(uri1);
-//		Package pack = loadPackage(uri1);
+		
 		Resource resource = RESOURCE_SET.getResource(uri1, true);
+		Model model = getModel(resource);
+//		Package pack = loadPackage(uri1);
 
 		//retrueve uri for the profile model
 		file = container.getFile(new Path(profilepath));
@@ -238,13 +250,14 @@ public class Util {
 
 		model.applyProfile(profile);
 
-//		resource.save(null); //save doesnt work, so we must save as over same file
+		resource.setModified(true);
+		resource.save(null); //save doesnt work, so we must save as over same file
 
-		file = container.getFile(new Path(modelpath));
-		String apath = file.getLocation().toFile().getAbsolutePath();
-		uri = URI.createFileURI(apath);
-		Resource otherresource = RESOURCE_SET.createResource(uri);
-		otherresource.getContents().add(model);
-		otherresource.save(Collections.EMPTY_MAP);
+//		file = container.getFile(new Path(modelpath));
+//		String apath = file.getLocation().toFile().getAbsolutePath();
+//		uri = URI.createFileURI(apath);
+//		Resource otherresource = RESOURCE_SET.createResource(uri);
+//		otherresource.getContents().add(model);
+//		otherresource.save(Collections.EMPTY_MAP);
 	}
 }
