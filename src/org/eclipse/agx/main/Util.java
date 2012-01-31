@@ -127,6 +127,8 @@ public class Util {
 		Resource resource = RESOURCE_SET.getResource(uri, true);
 		model = (org.eclipse.uml2.uml.Model) EcoreUtil.getObjectByType(
 				resource.getContents(), UMLPackage.Literals.MODEL);
+		
+		resource.unload();
 		return (Model) model;
 	}
 
@@ -197,7 +199,21 @@ public class Util {
 			IFile file = container.getFile(fname);
 			file.create(fstream, 1, monitor);
 		}
+		applyProfiles(container,"model.uml");
 		applyProfile(container, "model.uml", "pyegg.profile.uml");
+	}
+
+	public static void applyProfiles(IContainer container, String modelpath) throws IOException{
+		String modelfullpath = container.getFile(new Path(modelpath)).getLocation().toOSString();
+		IFile file = container.getFile(new Path(modelpath));
+		String fullpath = file.getLocation().toOSString();
+		Config conf=new Config(fullpath);
+		String generator = conf.getGenerator();
+		String[] profiles = conf.getProfiles();
+		
+		//conf.update();
+		AGX agx=new AGX();
+		agx.importProfiles(generator, modelfullpath, profiles);
 	}
 
 	public static void applyProfile(IContainer container, String modelpath,

@@ -30,14 +30,11 @@ public class Config extends Object {
 		}
 	}
 	
-	public void update() {
-		try {
-			File file = new File(configpath);
-			FileOutputStream out = new FileOutputStream(file);
-			properties.store(out, "---AGX Properties---");
-			out.close();
-		} catch (IOException e) {
-		}
+	public void update() throws IOException {
+		File file = new File(configpath);
+		FileOutputStream out = new FileOutputStream(file);
+		properties.store(out, "---AGX Properties---");
+		out.close();
 	}
 	
 	public String getGenerator() {
