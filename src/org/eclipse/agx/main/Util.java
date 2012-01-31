@@ -229,11 +229,11 @@ public class Util {
 		for (int i=0;i<profiles.length;i++){
 			profilepaths[i]=profiles[i]+".profile.uml";
 		}
-		applyProfile(container, modelpath, profilepaths);
+		applyProfiles(container, modelpath, profilepaths);
 
 	}
 
-	public static void applyProfile(IContainer container, String modelpath,
+	public static void applyProfiles(IContainer container, String modelpath,
 			String[] profilepaths) throws IOException {
 		ResourceSetImpl RESOURCE_SET = new ResourceSetImpl();
 
