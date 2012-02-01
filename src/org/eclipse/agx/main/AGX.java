@@ -289,7 +289,7 @@ public class AGX extends Object {
     /*
      * Get console to write to.
      */
-    private MessageConsole getConsole() {
+    public MessageConsole getConsole() {
     	String name = "AGX";
     	ConsolePlugin plugin = ConsolePlugin.getDefault();
         IConsoleManager conMan = plugin.getConsoleManager();
