@@ -203,6 +203,8 @@ public class Util {
 		Iterator<String> it = filenames.iterator();
 		// create the new directory
 
+		//strip off ".uml"
+		targetpath=targetpath.replace(".uml", "");
 		String modelfile = "model.uml".replace("model", targetpath);
 
 		while (it.hasNext()) {
