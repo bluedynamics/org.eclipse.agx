@@ -3,14 +3,24 @@ package org.eclipse.agx.main;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.lang.reflect.Array;
 import java.net.URL;
+import java.nio.CharBuffer;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Scanner;
 
 import org.eclipse.agx.Activator;
 import org.eclipse.core.resources.IContainer;
@@ -127,8 +137,7 @@ public class Util {
 		Resource resource = RESOURCE_SET.getResource(uri, true);
 		model = (org.eclipse.uml2.uml.Model) EcoreUtil.getObjectByType(
 				resource.getContents(), UMLPackage.Literals.MODEL);
-		
-		
+
 		resource.unload();
 		return (Model) model;
 	}
@@ -137,12 +146,10 @@ public class Util {
 		org.eclipse.uml2.uml.Package model = null;
 		model = (org.eclipse.uml2.uml.Model) EcoreUtil.getObjectByType(
 				resource.getContents(), UMLPackage.Literals.MODEL);
-		
-		
+
 		return (Model) model;
 	}
 
-	
 	public void saveModel(org.eclipse.uml2.uml.Model model, URI uri) {
 		Resource resource = new ResourceSetImpl().createResource(uri);
 		resource.getContents().add(model);
@@ -196,7 +203,7 @@ public class Util {
 		Iterator<String> it = filenames.iterator();
 		// create the new directory
 
-		String modelname = "model.uml".replace("model", targetpath);
+		String modelfile = "model.uml".replace("model", targetpath);
 
 		while (it.hasNext()) {
 			String fname = it.next();
@@ -205,29 +212,66 @@ public class Util {
 			InputStream fstream = Util.class.getResourceAsStream(filepath);
 			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
-			IFile outfile = container.getFile(new Path(fname.replace("model", targetpath)));
+			IFile outfile = container.getFile(new Path(fname.replace("model",
+					targetpath)));
 			outfile.create(fstream, 1, monitor);
 		}
-		applyProfiles(container,modelname);
-//		applyProfile(container, "model.uml", "pyegg.profile.uml");
+		applyProfiles(container, modelfile);
+
+		// update the model references inside .di and .notation
+		// XXX:for the moment i do it via string replace
+		// if there is a purist he might do this correctly with xml parsing ;)
+
+		String notationfile = "model.notation".replace("model", targetpath);
+		fileStringReplace(container, notationfile, "model.uml", modelfile);
+		String difile = "model.di".replace("model", targetpath);
+		fileStringReplace(container, difile, "model.notation", notationfile);
+
 	}
 
-	public static void applyProfiles(IContainer container, String modelpath) throws IOException{
-		String modelfullpath = container.getFile(new Path(modelpath)).getLocation().toOSString();
+	public static String readFile(String path) throws IOException {
+		FileInputStream stream = new FileInputStream(new File(path));
+		try {
+			FileChannel fc = stream.getChannel();
+			MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0,
+					fc.size());
+			/* Instead of using default, pass in a decoder. */
+			return Charset.defaultCharset().decode(bb).toString();
+		} finally {
+			stream.close();
+		}
+	}
+
+	public static void fileStringReplace(IContainer container,
+			String file, String from, String to) throws CoreException,
+			IOException {
+		IFile ifile = container.getFile(new Path(file));
+		String path = ifile.getLocation().toOSString();
+
+		String buf = readFile(path).replace(from, to);
+		FileWriter fw = new FileWriter(path);
+		fw.write(buf);
+		fw.close();
+	}
+
+	public static void applyProfiles(IContainer container, String modelpath)
+			throws IOException {
+		String modelfullpath = container.getFile(new Path(modelpath))
+				.getLocation().toOSString();
 		IFile file = container.getFile(new Path(modelpath));
 		String fullpath = file.getLocation().toOSString();
-		Config conf=new Config(fullpath);
+		Config conf = new Config(fullpath);
 		String generator = conf.getGenerator();
 		String[] profiles = conf.getProfiles();
-		
-		//conf.update();
-		AGX agx=new AGX();
+
+		// conf.update();
+		AGX agx = new AGX();
 		agx.importProfiles(generator, modelfullpath, profiles);
-		
-		//and now apply the profiles
+
+		// and now apply the profiles
 		String[] profilepaths = new String[profiles.length];
-		for (int i=0;i<profiles.length;i++){
-			profilepaths[i]=profiles[i]+".profile.uml";
+		for (int i = 0; i < profiles.length; i++) {
+			profilepaths[i] = profiles[i] + ".profile.uml";
 		}
 		applyProfiles(container, modelpath, profilepaths);
 
@@ -239,34 +283,28 @@ public class Util {
 
 		IFile file = container.getFile(new Path(modelpath));
 		URI uri1 = URI.createURI(file.getFullPath().toOSString());
-		
+
 		Resource resource = RESOURCE_SET.getResource(uri1, true);
 		Model model = getModel(resource);
-//		Package pack = loadPackage(uri1);
 
-		//retrieve uri for the profile model
-		for(int i=0;i<profilepaths.length;i++){
+		for (int i = 0; i < profilepaths.length; i++) {
+			// retrieve uri for the profile model
 			String profilepath = profilepaths[i];
 			file = container.getFile(new Path(profilepath));
 			URI uri = URI.createURI(file.getFullPath().toOSString());
-	
-			
-			//extract the profile
+
+			// extract the profile
 			Resource profresource = RESOURCE_SET.getResource(uri, true);
 			Profile profile = (Profile) EcoreUtil.getObjectByType(
 					profresource.getContents(), UMLPackage.Literals.PACKAGE);
-	
+
+			// slam it into the model
 			model.applyProfile(profile);
 		}
-		
-		resource.setModified(true);
-		resource.save(null); //save doesnt work, so we must save as over same file
 
-//		file = container.getFile(new Path(modelpath));
-//		String apath = file.getLocation().toFile().getAbsolutePath();
-//		uri = URI.createFileURI(apath);
-//		Resource otherresource = RESOURCE_SET.createResource(uri);
-//		otherresource.getContents().add(model);
-//		otherresource.save(Collections.EMPTY_MAP);
+		resource.setModified(true);
+		resource.save(null); // save doesnt work, so we must save as over same
+								// file
+
 	}
 }
