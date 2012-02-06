@@ -34,6 +34,7 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.common.util.WrappedException;
@@ -46,6 +47,7 @@ import org.eclipse.ui.dialogs.WizardNewFolderMainPage;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.Profile;
+import org.eclipse.uml2.uml.ProfileApplication;
 import org.eclipse.uml2.uml.UMLPackage;
 
 import com.sun.xml.internal.ws.util.StringUtils;
@@ -303,9 +305,16 @@ public class Util {
 					profresource.getContents(), UMLPackage.Literals.PACKAGE);
 
 			// slam it into the model
-			model.applyProfile(profile);
+			ProfileApplication app = model.getProfileApplication(profile);
+			String prname = profile.getQualifiedName();
+			
+			Profile app1 = model.getAppliedProfile(prname, true);
+			if(app1==null){// unfortunately this doesnt work, for some reason the already applied profile doesnt have a name=-
+				
+//				model.applyProfile(profile);
+			}
 		}
-
+		
 		resource.setModified(true);
 		resource.save(null); // save doesnt work, so we must save as over same
 								// file
