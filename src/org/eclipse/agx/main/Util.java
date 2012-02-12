@@ -68,11 +68,18 @@ public class Util {
 	/*
 	 * return array from ';' seperated string
 	 */
-	public String[] str2Arr(String str) {
-		String[] ret = str.split(";");
-		if (ret.length == 1 && ret[0].equals("")) {
+	public static String[] str2Arr(String str) {
+		String[] vals = str.split(";");
+		
+		String[] ret;
+		if (vals.length == 1 && vals[0].equals("")) {
 			return new String[] {};
 		}
+		
+		ret=new String[vals.length];
+		for(int i=0;i<vals.length;i++)
+			ret[i]=vals[i].trim();
+		
 		return ret;
 	}
 
@@ -201,16 +208,17 @@ public class Util {
 			CoreException {
 		InputStream istream = Util.class.getResourceAsStream(MODEL_ROOT + path
 				+ "/manifest.txt");
-		ArrayList<String> filenames = readStreamLines(istream);
-		Iterator<String> it = filenames.iterator();
+		Manifest mani = new Manifest(istream);
+		String[] filenames = mani.getFilenames();
+		//do it via the new Manifest class
+		
 		// create the new directory
-
+		
 		//strip off ".uml"
 		targetpath=targetpath.replace(".uml", "");
 		String modelfile = "model.uml".replace("model", targetpath);
 
-		while (it.hasNext()) {
-			String fname = it.next();
+		for (String fname :filenames) {
 			IPath inpath = new Path(fname);
 			String filepath = MODEL_ROOT + path + "/" + inpath;
 			InputStream fstream = Util.class.getResourceAsStream(filepath);
