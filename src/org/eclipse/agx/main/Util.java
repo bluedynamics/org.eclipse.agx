@@ -210,13 +210,14 @@ public class Util {
 				+ "/manifest.txt");
 		Manifest mani = new Manifest(istream);
 		String[] filenames = mani.getFilenames();
+		String modelname = mani.getModelname();
 		//do it via the new Manifest class
 		
 		// create the new directory
 		
 		//strip off ".uml"
 		targetpath=targetpath.replace(".uml", "");
-		String modelfile = "model.uml".replace("model", targetpath);
+		String modelfile = (modelname+".uml").replace(modelname, targetpath);
 
 		for (String fname :filenames) {
 			IPath inpath = new Path(fname);
@@ -224,7 +225,7 @@ public class Util {
 			InputStream fstream = Util.class.getResourceAsStream(filepath);
 			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
-			IFile outfile = container.getFile(new Path(fname.replace("model",
+			IFile outfile = container.getFile(new Path(fname.replace(modelname,
 					targetpath)));
 			outfile.create(fstream, 1, monitor);
 		}
@@ -234,10 +235,10 @@ public class Util {
 		// XXX:for the moment i do it via string replace
 		// if there is a purist he might do this correctly with xml parsing ;)
 
-		String notationfile = "model.notation".replace("model", targetpath);
-		fileStringReplace(container, notationfile, "model.uml", modelfile);
-		String difile = "model.di".replace("model", targetpath);
-		fileStringReplace(container, difile, "model.notation", notationfile);
+		String notationfile = (modelname+".notation").replace(modelname, targetpath);
+		fileStringReplace(container, notationfile, modelname+".uml", modelfile);
+		String difile = (modelname+".di").replace(modelname, targetpath);
+		fileStringReplace(container, difile, modelname+".notation", notationfile);
 
 	}
 

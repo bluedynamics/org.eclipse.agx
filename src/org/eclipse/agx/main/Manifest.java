@@ -40,4 +40,8 @@ class Manifest extends Object{
 		String [] ret = Util.str2Arr(files);
 		return ret;
 	}
+	
+	public String getModelname(){
+		return properties.getProperty("modelname","");
+	}
 }
