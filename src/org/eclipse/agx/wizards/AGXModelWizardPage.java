@@ -42,7 +42,7 @@ public class AGXModelWizardPage extends WizardPage {
 
 	private ISelection selection;
 
-	private List modelType;
+	private Combo modelType;
 
 	String templateName;
 	/**
@@ -114,7 +114,10 @@ public class AGXModelWizardPage extends WizardPage {
 		label = new Label(container, SWT.NULL);
 		label.setText("&Template:");
 
-		modelType = new List(container,SWT.NULL);
+		
+		
+		
+		modelType = new Combo (container, SWT.READ_ONLY);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		modelType.setLayoutData(gd);
 		modelType.select(0);
@@ -123,13 +126,13 @@ public class AGXModelWizardPage extends WizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				dialogChanged();
-				templateName=modelType.getSelection()[0];
+				templateName=modelType.getText();
 			}
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
-				templateName=modelType.getSelection()[0];
+				templateName=modelType.getText();
 				
 			}
 		});
@@ -222,8 +225,10 @@ public class AGXModelWizardPage extends WizardPage {
 			updateStatus("File name must be valid");
 			return;
 		}
-		if(modelType.getSelection().length==0){
-			updateStatus("Please select a model type");
+		@SuppressWarnings("unused")
+		String mtype = modelType.getText();
+		if(mtype.isEmpty()){
+			updateStatus("Please select a model template!");
 			return;
 		}
 		int dotLoc = fileName.lastIndexOf('.');

@@ -185,7 +185,7 @@ public class AGX extends Object {
     		for (int i = 0; i < profilePathsArray.length; i++) {
     			profilesConcat += profilePathsArray[i];
     			if (i != profilePathsArray.length - 1) {
-        			profilesConcat += ";";
+        			profilesConcat += ",";
         		}
     		}
     		
