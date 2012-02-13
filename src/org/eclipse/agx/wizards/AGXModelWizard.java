@@ -127,7 +127,7 @@ public class AGXModelWizard extends Wizard implements INewWizard {
 					+ "\" does not exist.");
 		}
 		IContainer container = (IContainer) resource;
-		final IFile file = container.getFile(new Path(fileName));
+		final IFile file = container.getFile(new Path(fileName+".di"));
 
 		String template = page.templateName;
 		Util.copyModel(template, container, fileName, monitor);
