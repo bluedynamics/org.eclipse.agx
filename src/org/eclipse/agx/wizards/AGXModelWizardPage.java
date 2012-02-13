@@ -36,7 +36,6 @@ import org.eclipse.ui.dialogs.ContainerSelectionDialog;
  */
 
 public class AGXModelWizardPage extends WizardPage {
-	private Text containerText;
 
 	private Text fileText;
 
@@ -45,6 +44,8 @@ public class AGXModelWizardPage extends WizardPage {
 	private Combo modelType;
 
 	String templateName;
+
+	private String containerpath;
 	/**
 	 * Constructor for SampleNewWizardPage.
 	 * 
@@ -68,37 +69,13 @@ public class AGXModelWizardPage extends WizardPage {
 		layout.verticalSpacing = 9;
 		
 		//-----------------------
-		//container
-		//-----------------------
-
-		Label label = new Label(container, SWT.NULL);
-		label.setText("&Folder:");
-
-		containerText = new Text(container, SWT.BORDER | SWT.SINGLE);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		containerText.setLayoutData(gd);
-		containerText.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
-				dialogChanged();
-			}
-		});
-
-		Button button = new Button(container, SWT.PUSH);
-		button.setText("Browse...");
-		button.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				handleBrowse();
-			}
-		});
-
-		//-----------------------
 		//model name
 		//-----------------------
-		label = new Label(container, SWT.NULL);
+		Label label = new Label(container, SWT.NULL);
 		label.setText("&File name:");
 
 		fileText = new Text(container, SWT.BORDER | SWT.SINGLE);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		fileText.setLayoutData(gd);
 		fileText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
@@ -172,7 +149,7 @@ public class AGXModelWizardPage extends WizardPage {
 					container = (IContainer) obj;
 				else
 					container = ((IResource) obj).getParent();
-				containerText.setText(container.getFullPath().toString());
+				containerpath=container.getFullPath().toString();
 			}
 		}
 		fileText.setText("model");
@@ -183,17 +160,6 @@ public class AGXModelWizardPage extends WizardPage {
 	 * the container field.
 	 */
 
-	private void handleBrowse() {
-		ContainerSelectionDialog dialog = new ContainerSelectionDialog(
-				getShell(), ResourcesPlugin.getWorkspace().getRoot(), false,
-				"Select new file container");
-		if (dialog.open() == ContainerSelectionDialog.OK) {
-			Object[] result = dialog.getResult();
-			if (result.length == 1) {
-				containerText.setText(((Path) result[0]).toString());
-			}
-		}
-	}
 
 	/**
 	 * Ensures that both text fields are set.
@@ -249,7 +215,7 @@ public class AGXModelWizardPage extends WizardPage {
 	}
 
 	public String getContainerName() {
-		return containerText.getText();
+		return containerpath;
 	}
 
 	public String getFileName() {
