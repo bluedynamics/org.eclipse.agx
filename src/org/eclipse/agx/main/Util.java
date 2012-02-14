@@ -223,10 +223,9 @@ public class Util {
 			IPath inpath = new Path(fname);
 			String filepath = MODEL_ROOT + path + "/" + inpath;
 			InputStream fstream = Util.class.getResourceAsStream(filepath);
-			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-
-			IFile outfile = container.getFile(new Path(fname.replace(modelname,
-					targetpath)));
+//			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+			Path opath = new Path(fname.replace(modelname,targetpath));
+			IFile outfile = container.getFile(opath);
 			outfile.create(fstream, 1, monitor);
 		}
 		applyProfiles(container, modelfile);

@@ -8,6 +8,13 @@ import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.swt.graphics.Color;
 
 public class AGX extends Object {
@@ -126,6 +133,13 @@ public class AGX extends Object {
     	MessageConsole console = getConsole();
     	console.activate();
     	
+    	// get relative path for the target in order to refresh it
+    	IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+    	IPath rootpath = root.getLocation();
+    	Path targetpath = new Path(target);
+    	IPath relpath = targetpath.makeRelativeTo(rootpath);
+    	IResource targetres = root.findMember(relpath);
+    	
     	MessageConsoleStream out = console.newMessageStream();
 		Color black = new Color(null, 0, 0, 0);
 		out.setColor(black);
@@ -198,6 +212,10 @@ public class AGX extends Object {
     		out.println("Command: " + command);
     		
     		Process p = Runtime.getRuntime().exec(command);
+    		p.waitFor();
+    		
+    		
+    		targetres.refreshLocal(targetres.DEPTH_INFINITE, null);
             BufferedReader input =
                 new BufferedReader(new InputStreamReader(p.getInputStream()));
             BufferedReader error =
