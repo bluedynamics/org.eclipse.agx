@@ -4,6 +4,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.WorkbenchException;
 import org.eclipse.core.internal.resources.Resource;
 import org.eclipse.core.internal.resources.WorkspaceRoot;
 import org.eclipse.core.runtime.*;
@@ -136,10 +137,19 @@ public class AGXModelWizard extends Wizard implements INewWizard {
 		monitor.setTaskName("Opening file for editing...");
 		getShell().getDisplay().asyncExec(new Runnable() {
 			public void run() {
-				IWorkbenchPage page = PlatformUI.getWorkbench()
+				IWorkbench workbench = PlatformUI.getWorkbench();
+				IWorkbenchPage page = workbench
 						.getActiveWorkbenchWindow().getActivePage();
 				try {
+					workbench.showPerspective("org.eclipse.papyrus.perspective.PapyrusPerspective", 
+						      workbench.getActiveWorkbenchWindow());
+				} catch (WorkbenchException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				try {
 					IDE.openEditor(page, file, true);
+					
 				} catch (PartInitException e) {
 				}
 			}
