@@ -1,6 +1,0 @@
-files=agx.generator.dexterity-sample.di;\
-    agx.generator.dexterity-sample.notation;\
-    agx.generator.dexterity-sample.uml;\
-    agx.generator.dexterity-sample.uml.agx
-
-modelname=agx.generator.dexterity-sample

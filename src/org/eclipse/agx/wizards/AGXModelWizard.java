@@ -124,6 +124,9 @@ public class AGXModelWizard extends Wizard implements INewWizard {
 					+ "\" does not exist.");
 		}
 		IContainer container = (IContainer) resource;
+		if(fileName.endsWith(".uml")){
+			fileName=fileName.replace(".uml", "");
+		}
 		final IFile file = container.getFile(new Path(fileName+".di"));
 
 		String template = page.templateName;

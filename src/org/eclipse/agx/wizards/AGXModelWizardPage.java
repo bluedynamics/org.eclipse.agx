@@ -203,10 +203,10 @@ public class AGXModelWizardPage extends WizardPage {
 		int dotLoc = fileName.lastIndexOf('.');
 		if (dotLoc != -1) {
 			String ext = fileName.substring(dotLoc + 1);
-			if (ext.equalsIgnoreCase("uml") == false) {
-				updateStatus("File extension must be \"uml\"");
-				return;
-			}
+//			if (ext.equalsIgnoreCase("uml") == false) {
+//				updateStatus("File extension must be \"uml\"");
+//				return;
+//			}
 		}
 		updateStatus(null);
 	}
