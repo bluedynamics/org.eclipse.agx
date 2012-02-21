@@ -1,10 +1,4 @@
-<<<<<<< HEAD
-pythonegg:Python Egg
-dexterity_example:Dexterity Sample
-dexterity:Dexterity
-=======
-python_egg
-plone_product
-dexterity_product
-dexterity_example
->>>>>>> f80ed93ffdb9465a5d458318b8f9096f1248c1d3
+python_egg:Python Egg
+plone_product:Plone Product
+dexterity_product:Dexterity Product
+dexterity_example:Dexterity Example
