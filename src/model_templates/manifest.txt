@@ -1,2 +1,4 @@
-pythonegg
+python_egg
+plone_product
+dexterity_product
 dexterity_example

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:buildout="http:///schemas/buildout/_JO9FcFvjEeG1f-Kr3Cp4uw/1" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:plone="http:///schemas/plone/_QyR3QFyDEeGwDp_qVn1OTQ/8" xmlns:pyegg="http:///schemas/pyegg/_m3LEwPJqEeC2FJWWHfGcuA/17" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xsi:schemaLocation="http:///schemas/buildout/_JO9FcFvjEeG1f-Kr3Cp4uw/1 uml_profiles/buildout.profile.uml#_JO9FcVvjEeG1f-Kr3Cp4uw http:///schemas/plone/_QyR3QFyDEeGwDp_qVn1OTQ/8 uml_profiles/plone.profile.uml#_QyU6kFyDEeGwDp_qVn1OTQ http:///schemas/pyegg/_m3LEwPJqEeC2FJWWHfGcuA/17 uml_profiles/pyegg.profile.uml#_m3OIEPJqEeC2FJWWHfGcuA">
+  <uml:Model xmi:id="_vbqH8Ey3EeGV5f8-MtNCTQ" name="model">
+    <packagedElement xmi:type="uml:Package" xmi:id="_SE9PgEy-EeGV5f8-MtNCTQ" name="agx.dexteritytemplate"/>
+    <profileApplication xmi:id="_5zkvQEy9EeGV5f8-MtNCTQ">
+      <eAnnotations xmi:id="_51NuAEy9EeGV5f8-MtNCTQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="uml_profiles/pyegg.profile.uml#_m3OIEPJqEeC2FJWWHfGcuA"/>
+      </eAnnotations>
+      <appliedProfile href="uml_profiles/pyegg.profile.uml#_HHBJsNqqEd6cif0axL0c4w"/>
+    </profileApplication>
+    <profileApplication xmi:id="_-SUygEy9EeGV5f8-MtNCTQ">
+      <eAnnotations xmi:id="_-UeuoEy9EeGV5f8-MtNCTQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="uml_profiles/zca.profile.uml#_oeYDMEyrEeGV5f8-MtNCTQ"/>
+      </eAnnotations>
+      <appliedProfile href="uml_profiles/zca.profile.uml#_gTeSUL-VEeCXSLIizrgdww"/>
+    </profileApplication>
+    <profileApplication xmi:id="_NSQVgEy-EeGV5f8-MtNCTQ">
+      <eAnnotations xmi:id="_NT9lsEy-EeGV5f8-MtNCTQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="uml_profiles/dexterity.profile.uml#_6HtYUFvIEeG1f-Kr3Cp4uw"/>
+      </eAnnotations>
+      <appliedProfile href="uml_profiles/dexterity.profile.uml#_IXXe8Ey1EeGV5f8-MtNCTQ"/>
+    </profileApplication>
+    <profileApplication xmi:id="_8qrCUFb8EeG7eej248Qh-Q">
+      <eAnnotations xmi:id="_8ruLMFb8EeG7eej248Qh-Q" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="uml_profiles/plone.profile.uml#_QyU6kFyDEeGwDp_qVn1OTQ"/>
+      </eAnnotations>
+      <appliedProfile href="uml_profiles/plone.profile.uml#__CiAUUwhEeGTE4gBrh7aXw"/>
+    </profileApplication>
+    <profileApplication xmi:id="_8MQJcFy5EeG1mLF7jMwarw">
+      <eAnnotations xmi:id="_8M1_UFy5EeG1mLF7jMwarw" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="uml_profiles/buildout.profile.uml#_JO9FcVvjEeG1f-Kr3Cp4uw"/>
+      </eAnnotations>
+      <appliedProfile href="uml_profiles/buildout.profile.uml#_foIlMFunEeGtD5GMZ61r8A"/>
+    </profileApplication>
+  </uml:Model>
+  <pyegg:pyegg xmi:id="_j4F58Ey-EeGV5f8-MtNCTQ" base_Package="_SE9PgEy-EeGV5f8-MtNCTQ"/>
+  <plone:gsprofile xmi:id="_-gUVUFb8EeG7eej248Qh-Q" base_Package="_SE9PgEy-EeGV5f8-MtNCTQ"/>
+  <buildout:plone_self_contained xmi:id="_9Rn2EFy5EeG1mLF7jMwarw" base_Package="_SE9PgEy-EeGV5f8-MtNCTQ"/>
+</xmi:XMI>
