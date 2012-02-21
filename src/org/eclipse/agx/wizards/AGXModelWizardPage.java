@@ -15,18 +15,18 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
+//import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
+//import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.List;
+//import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.dialogs.ContainerSelectionDialog;
+//import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 
 
 /**
@@ -34,7 +34,6 @@ import org.eclipse.ui.dialogs.ContainerSelectionDialog;
  * as the file name. The page will only accept file name without the extension
  * OR with the extension that matches the expected one (uml).
  */
-
 public class AGXModelWizardPage extends WizardPage {
 
 	private Text fileText;
@@ -54,7 +53,8 @@ public class AGXModelWizardPage extends WizardPage {
 	public AGXModelWizardPage(ISelection selection) {
 		super("wizardPage");
 		setTitle("AGX Model");
-		setDescription("This wizard creates a new file with *.uml extension that can be opened by a multi-page editor.");
+		setDescription("This wizard creates a new file with *.uml extension " +
+				"that can be opened by a multi-page editor.");
 		this.selection = selection;
 	}
 
@@ -68,9 +68,7 @@ public class AGXModelWizardPage extends WizardPage {
 		layout.numColumns = 3;
 		layout.verticalSpacing = 9;
 		
-		//-----------------------
 		//model name
-		//-----------------------
 		Label label = new Label(container, SWT.NULL);
 		label.setText("&File name:");
 
@@ -85,15 +83,11 @@ public class AGXModelWizardPage extends WizardPage {
 
 		label = new Label(container, SWT.NULL);
 		label.setText("");
-		//-----------------------
+		
 		//template name
-		//-----------------------
 		label = new Label(container, SWT.NULL);
 		label.setText("&Template:");
 
-		
-		
-		
 		modelType = new Combo (container, SWT.READ_ONLY);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		modelType.setLayoutData(gd);
@@ -103,13 +97,13 @@ public class AGXModelWizardPage extends WizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				dialogChanged();
-				templateName=modelType.getText();
+				templateName = modelType.getText();
 			}
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
-				templateName=modelType.getText();
+				templateName = modelType.getText();
 				
 			}
 		});
@@ -135,7 +129,6 @@ public class AGXModelWizardPage extends WizardPage {
 	/**
 	 * Tests if the current workbench selection is a suitable container to use.
 	 */
-
 	private void initialize() {
 		if (selection != null && selection.isEmpty() == false
 				&& selection instanceof IStructuredSelection) {
@@ -149,7 +142,7 @@ public class AGXModelWizardPage extends WizardPage {
 					container = (IContainer) obj;
 				else
 					container = ((IResource) obj).getParent();
-				containerpath=container.getFullPath().toString();
+				containerpath = container.getFullPath().toString();
 			}
 		}
 		fileText.setText("model");
@@ -164,7 +157,6 @@ public class AGXModelWizardPage extends WizardPage {
 	/**
 	 * Ensures that both text fields are set.
 	 */
-
 	private void dialogChanged() {
 		IResource container = ResourcesPlugin.getWorkspace().getRoot()
 				.findMember(new Path(getContainerName()));
@@ -175,7 +167,8 @@ public class AGXModelWizardPage extends WizardPage {
 			return;
 		}
 		if (container == null
-				|| (container.getType() & (IResource.PROJECT | IResource.FOLDER)) == 0) {
+				|| (container.getType() 
+						& (IResource.PROJECT | IResource.FOLDER)) == 0) {
 			updateStatus("File container must exist");
 			return;
 		}
@@ -205,7 +198,6 @@ public class AGXModelWizardPage extends WizardPage {
 				return;
 			}
 		}
-		
 		updateStatus(null);
 	}
 

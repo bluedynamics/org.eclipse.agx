@@ -5,25 +5,25 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.WorkbenchException;
-import org.eclipse.core.internal.resources.Resource;
-import org.eclipse.core.internal.resources.WorkspaceRoot;
+//import org.eclipse.core.internal.resources.Resource;
+//import org.eclipse.core.internal.resources.WorkspaceRoot;
 import org.eclipse.core.runtime.*;
 import org.eclipse.jface.operation.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
+//import java.io.ByteArrayInputStream;
+//import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+//import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.net.JarURLConnection;
-import java.net.URI;
+//import java.net.JarURLConnection;
+//import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.ResourceBundle;
-import java.util.jar.JarFile;
+//import java.net.URL;
+//import java.net.URLConnection;
+//import java.util.ArrayList;
+//import java.util.Enumeration;
+//import java.util.ResourceBundle;
+//import java.util.jar.JarFile;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -32,7 +32,7 @@ import org.eclipse.core.runtime.CoreException;
 
 import org.eclipse.ui.*;
 import org.eclipse.ui.ide.IDE;
-import org.eclipse.uml2.uml.UMLFactory;
+//import org.eclipse.uml2.uml.UMLFactory;
 
 import org.eclipse.agx.main.Util;
 
@@ -60,9 +60,7 @@ public class AGXModelWizard extends Wizard implements INewWizard {
 	/**
 	 * Adding the page to the wizard.
 	 */
-
 	public void addPages() {
-
 		page = new AGXModelWizardPage(selection);
 		addPage(page);
 	}
@@ -88,7 +86,6 @@ public class AGXModelWizard extends Wizard implements INewWizard {
 					// TODO Auto-generated catch block
 					throw new InvocationTargetException(e);
 				}
-
 				// finally {
 				// monitor.done();
 				// }
@@ -115,7 +112,6 @@ public class AGXModelWizard extends Wizard implements INewWizard {
 	 * @throws URISyntaxException
 	 * @throws IOException
 	 */
-
 	private void doFinish(String containerName, String fileName,
 			IProgressMonitor monitor) throws CoreException, URISyntaxException,
 			IOException {
@@ -141,8 +137,9 @@ public class AGXModelWizard extends Wizard implements INewWizard {
 				IWorkbenchPage page = workbench
 						.getActiveWorkbenchWindow().getActivePage();
 				try {
-					workbench.showPerspective("org.eclipse.papyrus.perspective.PapyrusPerspective", 
-						      workbench.getActiveWorkbenchWindow());
+					workbench.showPerspective(
+						"org.eclipse.papyrus.perspective.PapyrusPerspective", 
+						workbench.getActiveWorkbenchWindow());
 				} catch (WorkbenchException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -156,7 +153,6 @@ public class AGXModelWizard extends Wizard implements INewWizard {
 		});
 		monitor.worked(1);
 	}
-
 
 	private void throwCoreException(String message) throws CoreException {
 		IStatus status = new Status(IStatus.ERROR, "org.eclipse.agx",

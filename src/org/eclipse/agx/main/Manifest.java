@@ -2,7 +2,7 @@ package org.eclipse.agx.main;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+//import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -25,16 +25,14 @@ class Manifest extends Object{
 	    load(is);
 	}
 
-
 	private void load(InputStream in) throws IOException {
 		// TODO Auto-generated method stub
 	    properties.load(in);
 	}
 
-
 	public String[] getFilenames(){
 		String files = properties.getProperty("files", "");
-		if (files.trim()=="")
+		if (files.trim() == "")
 			return new String[0];
 		
 		String [] ret = Util.str2Arr(files);
@@ -42,6 +40,6 @@ class Manifest extends Object{
 	}
 	
 	public String getModelname(){
-		return properties.getProperty("modelname","");
+		return properties.getProperty("modelname", "");
 	}
 }

@@ -8,5 +8,4 @@ public class PreferenceConstants {
 	public static final String P_EXECUTABLE = "executablePreference";
 
 	public static final String P_TARGET = "targetPreference";
-
 }

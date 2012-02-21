@@ -51,6 +51,4 @@ public class GenerateAction implements IObjectActionDelegate {
   		    currentFile = (IFile)structuredSelection.getFirstElement();
   		}
   	}
-
-
 }

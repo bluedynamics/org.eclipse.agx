@@ -8,13 +8,13 @@ import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
-import org.eclipse.core.resources.IFile;
+//import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.emf.common.util.URI;
+//import org.eclipse.emf.common.util.URI;
 import org.eclipse.swt.graphics.Color;
 
 public class AGX extends Object {
@@ -214,8 +214,8 @@ public class AGX extends Object {
     		Process p = Runtime.getRuntime().exec(command);
     		p.waitFor();
     		
-    		
     		targetres.refreshLocal(targetres.DEPTH_INFINITE, null);
+    		
             BufferedReader input =
                 new BufferedReader(new InputStreamReader(p.getInputStream()));
             BufferedReader error =

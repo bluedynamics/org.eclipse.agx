@@ -66,5 +66,4 @@ public class AGXPreferencePage
 	 */
 	public void init(IWorkbench workbench) {
 	}
-	
 }

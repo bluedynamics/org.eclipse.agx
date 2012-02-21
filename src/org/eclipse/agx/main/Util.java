@@ -1,62 +1,62 @@
 package org.eclipse.agx.main;
 
-import java.io.BufferedInputStream;
+//import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+//import java.io.FileNotFoundException;
+//import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.lang.reflect.Array;
-import java.net.URL;
-import java.nio.CharBuffer;
+//import java.io.StringReader;
+//import java.lang.reflect.Array;
+//import java.net.URL;
+//import java.nio.CharBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Scanner;
+//import java.util.Collections;
+//import java.util.Iterator;
+//import java.util.Scanner;
 
-import org.eclipse.agx.Activator;
+//import org.eclipse.agx.Activator;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
+//import org.eclipse.core.resources.IFolder;
+//import org.eclipse.core.resources.IResource;
+//import org.eclipse.core.resources.IWorkspaceRoot;
+//import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
+//import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.TreeIterator;
+//import org.eclipse.emf.common.util.EList;
+//import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.common.util.WrappedException;
-import org.eclipse.emf.ecore.EObject;
+//import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.ui.dialogs.WizardNewFolderMainPage;
+//import org.eclipse.ui.dialogs.WizardNewFolderMainPage;
 import org.eclipse.uml2.uml.Model;
-import org.eclipse.uml2.uml.Package;
+//import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.Profile;
 import org.eclipse.uml2.uml.ProfileApplication;
 import org.eclipse.uml2.uml.UMLPackage;
 
-import com.sun.xml.internal.ws.util.StringUtils;
+//import com.sun.xml.internal.ws.util.StringUtils;
 
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.util.EcoreUtil;
+//import org.eclipse.emf.ecore.resource.Resource;
+//import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+//import org.eclipse.emf.ecore.util.EcoreUtil;
 
-import org.eclipse.emf.common.util.URI;
+//import org.eclipse.emf.common.util.URI;
 
 //import org.eclipse.papyrus.umlutils.PackageUtil;
 
@@ -76,9 +76,9 @@ public class Util {
 			return new String[] {};
 		}
 		
-		ret=new String[vals.length];
-		for(int i=0;i<vals.length;i++)
-			ret[i]=vals[i].trim();
+		ret = new String[vals.length];
+		for(int i = 0; i < vals.length; i++)
+			ret[i] = vals[i].trim();
 		
 		return ret;
 	}
@@ -211,20 +211,20 @@ public class Util {
 		Manifest mani = new Manifest(istream);
 		String[] filenames = mani.getFilenames();
 		String modelname = mani.getModelname();
-		//do it via the new Manifest class
+		// do it via the new Manifest class
 		
 		// create the new directory
 		
-		//strip off ".uml"
-		targetpath=targetpath.replace(".uml", "");
-		String modelfile = (modelname+".uml").replace(modelname, targetpath);
+		// strip off ".uml"
+		targetpath = targetpath.replace(".uml", "");
+		String modelfile = (modelname + ".uml").replace(modelname, targetpath);
 
 		for (String fname :filenames) {
 			IPath inpath = new Path(fname);
 			String filepath = MODEL_ROOT + path + "/" + inpath;
 			InputStream fstream = Util.class.getResourceAsStream(filepath);
-//			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-			Path opath = new Path(fname.replace(modelname,targetpath));
+			//IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+			Path opath = new Path(fname.replace(modelname, targetpath));
 			IFile outfile = container.getFile(opath);
 			outfile.create(fstream, 1, monitor);
 		}
@@ -234,11 +234,13 @@ public class Util {
 		// XXX:for the moment i do it via string replace
 		// if there is a purist he might do this correctly with xml parsing ;)
 
-		String notationfile = (modelname+".notation").replace(modelname, targetpath);
-		fileStringReplace(container, notationfile, modelname+".uml", modelfile);
-		String difile = (modelname+".di").replace(modelname, targetpath);
-		fileStringReplace(container, difile, modelname+".notation", notationfile);
-
+		String notationfile = (modelname + ".notation").replace(
+			modelname, targetpath);
+		fileStringReplace(container, notationfile, modelname + ".uml",
+				modelfile);
+		String difile = (modelname + ".di").replace(modelname, targetpath);
+		fileStringReplace(container, difile, modelname + ".notation",
+				notationfile);
 	}
 
 	public static String readFile(String path) throws IOException {
@@ -288,7 +290,6 @@ public class Util {
 			profilepaths[i] = profiles[i] + ".profile.uml";
 		}
 		applyProfiles(container, modelpath, profilepaths);
-
 	}
 
 	public static void applyProfiles(IContainer container, String modelpath,
@@ -317,15 +318,15 @@ public class Util {
 			String prname = profile.getQualifiedName();
 			
 			Profile app1 = model.getAppliedProfile(prname, true);
-			if(app1==null){// unfortunately this doesnt work, for some reason the already applied profile doesnt have a name=-
-				
-//				model.applyProfile(profile);
+			// unfortunately this doesnt work, for some reason the already 
+			// applied profile doesnt have a name=-
+			if(app1==null){
+				//model.applyProfile(profile);
 			}
 		}
 		
 		resource.setModified(true);
-		resource.save(null); // save doesnt work, so we must save as over same
-								// file
-
+		// save doesnt work, so we must save as over same file
+		resource.save(null);
 	}
 }
