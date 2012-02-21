@@ -69,7 +69,7 @@ public class Util {
 	 * return array from ';' seperated string
 	 */
 	public static String[] str2Arr(String str) {
-		String[] vals = str.split(";");
+		String[] vals = str.split("[;,]");
 		
 		String[] ret;
 		if (vals.length == 1 && vals[0].equals("")) {
