@@ -1,2 +1,3 @@
-pythonegg
-dexterity_example
+pythonegg:Python Egg
+dexterity_example:Dexterity Sample
+dexterity:Dexterity

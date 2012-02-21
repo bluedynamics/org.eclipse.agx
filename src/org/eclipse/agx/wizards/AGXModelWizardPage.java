@@ -2,6 +2,8 @@ package org.eclipse.agx.wizards;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import org.eclipse.agx.main.Util;
@@ -45,6 +47,8 @@ public class AGXModelWizardPage extends WizardPage {
 	String templateName;
 
 	private String containerpath;
+
+	private HashMap<String, String> templmap;
 	/**
 	 * Constructor for SampleNewWizardPage.
 	 * 
@@ -62,6 +66,7 @@ public class AGXModelWizardPage extends WizardPage {
 	 * @see IDialogPage#createControl(Composite)
 	 */
 	public void createControl(Composite parent) {
+		templmap = new HashMap<String,String>();
 		Composite container = new Composite(parent, SWT.NULL);
 		GridLayout layout = new GridLayout();
 		container.setLayout(layout);
@@ -97,13 +102,13 @@ public class AGXModelWizardPage extends WizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				dialogChanged();
-				templateName = modelType.getText();
+				templateName = templmap.get(modelType.getText());
 			}
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
-				templateName = modelType.getText();
+				templateName = templmap.get(modelType.getText());
 				
 			}
 		});
@@ -116,11 +121,16 @@ public class AGXModelWizardPage extends WizardPage {
 			e1.printStackTrace();
 		}
 
-		Iterator<String> it = templates.iterator();
-		while(it.hasNext()){
-			modelType.add(it.next());
+		for(String entry :templates){
+			String[] arr = entry.split(":");
+			String templ = arr[0];
+			String templabel=templ;
+			if(arr.length > 1)
+				templabel=arr[1];
+			modelType.add(templabel);
+			templmap.put(templabel, templ);
 		}
-		
+
 		initialize();
 		dialogChanged();
 		setControl(container);
