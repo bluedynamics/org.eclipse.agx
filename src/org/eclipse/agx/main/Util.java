@@ -287,7 +287,7 @@ public class Util {
 		// and now apply the profiles
 		String[] profilepaths = new String[profiles.length];
 		for (int i = 0; i < profiles.length; i++) {
-			profilepaths[i] = profiles[i] + ".profile.uml";
+			profilepaths[i] = "uml_profiles/"+profiles[i] + ".profile.uml";
 		}
 		applyProfiles(container, modelpath, profilepaths);
 	}
