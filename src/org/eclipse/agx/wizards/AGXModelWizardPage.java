@@ -8,9 +8,15 @@ import java.util.Iterator;
 
 import org.eclipse.agx.main.Util;
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
@@ -28,8 +34,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 //import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
-//import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 
+//import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 
 /**
  * The "New" wizard page allows setting the container for the new file as well
@@ -49,6 +55,7 @@ public class AGXModelWizardPage extends WizardPage {
 	private String containerpath;
 
 	private HashMap<String, String> templmap;
+
 	/**
 	 * Constructor for SampleNewWizardPage.
 	 * 
@@ -57,8 +64,8 @@ public class AGXModelWizardPage extends WizardPage {
 	public AGXModelWizardPage(ISelection selection) {
 		super("wizardPage");
 		setTitle("AGX Model");
-		setDescription("This wizard creates a new file with *.uml extension " +
-				"that can be opened by a multi-page editor.");
+		setDescription("This wizard creates a new file with *.uml extension "
+				+ "that can be opened by a multi-page editor.");
 		this.selection = selection;
 	}
 
@@ -66,14 +73,14 @@ public class AGXModelWizardPage extends WizardPage {
 	 * @see IDialogPage#createControl(Composite)
 	 */
 	public void createControl(Composite parent) {
-		templmap = new HashMap<String,String>();
+		templmap = new HashMap<String, String>();
 		Composite container = new Composite(parent, SWT.NULL);
 		GridLayout layout = new GridLayout();
 		container.setLayout(layout);
 		layout.numColumns = 3;
 		layout.verticalSpacing = 9;
-		
-		//model name
+
+		// model name
 		Label label = new Label(container, SWT.NULL);
 		label.setText("&File name:");
 
@@ -88,16 +95,16 @@ public class AGXModelWizardPage extends WizardPage {
 
 		label = new Label(container, SWT.NULL);
 		label.setText("");
-		
-		//template name
+
+		// template name
 		label = new Label(container, SWT.NULL);
 		label.setText("&Template:");
 
-		modelType = new Combo (container, SWT.READ_ONLY);
+		modelType = new Combo(container, SWT.READ_ONLY);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		modelType.setLayoutData(gd);
 		modelType.select(0);
-		modelType.addSelectionListener(new SelectionListener(){
+		modelType.addSelectionListener(new SelectionListener() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -109,24 +116,24 @@ public class AGXModelWizardPage extends WizardPage {
 			public void widgetDefaultSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
 				templateName = templmap.get(modelType.getText());
-				
+
 			}
 		});
 
 		ArrayList<String> templates = null;
 		try {
-			 templates = Util.listTemplateNames();
+			templates = Util.listTemplateNames();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
-		for(String entry :templates){
+		for (String entry : templates) {
 			String[] arr = entry.split(":");
 			String templ = arr[0];
-			String templabel=templ;
-			if(arr.length > 1)
-				templabel=arr[1];
+			String templabel = templ;
+			if (arr.length > 1)
+				templabel = arr[1];
 			modelType.add(templabel);
 			templmap.put(templabel, templ);
 		}
@@ -136,24 +143,33 @@ public class AGXModelWizardPage extends WizardPage {
 		setControl(container);
 	}
 
+	IResource extractSelection(ISelection sel) {
+		if (!(sel instanceof IStructuredSelection))
+			return null;
+		IStructuredSelection ss = (IStructuredSelection) sel;
+		Object element = ss.getFirstElement();
+		if (element instanceof IResource)
+			return (IResource) element;
+		if (!(element instanceof IAdaptable))
+			return null;
+		IAdaptable adaptable = (IAdaptable) element;
+		Object adapter = adaptable.getAdapter(IResource.class);
+		return (IResource) adapter;
+	}
+
 	/**
 	 * Tests if the current workbench selection is a suitable container to use.
 	 */
 	private void initialize() {
+//		PythonProjectSourceFolder ff;
+//		IWrappedResource wr;
 		if (selection != null && selection.isEmpty() == false
 				&& selection instanceof IStructuredSelection) {
 			IStructuredSelection ssel = (IStructuredSelection) selection;
 			if (ssel.size() > 1)
 				return;
-			Object obj = ssel.getFirstElement();
-			if (obj instanceof IResource) {
-				IContainer container;
-				if (obj instanceof IContainer)
-					container = (IContainer) obj;
-				else
-					container = ((IResource) obj).getParent();
-				containerpath = container.getFullPath().toString();
-			}
+			IResource res = extractSelection(selection);
+			containerpath=res.getFullPath().toString();
 		}
 		fileText.setText("model");
 	}
@@ -163,29 +179,34 @@ public class AGXModelWizardPage extends WizardPage {
 	 * the container field.
 	 */
 
-
 	/**
 	 * Ensures that both text fields are set.
 	 */
 	private void dialogChanged() {
-		IResource container = ResourcesPlugin.getWorkspace().getRoot()
-				.findMember(new Path(getContainerName()));
-		String fileName = getFileName();
+		IWorkspace wsp = ResourcesPlugin.getWorkspace();
+		IWorkspaceRoot root = wsp.getRoot();
+		String pathstring = getContainerName();
+		String fileName = "" ;
+		if (pathstring != null) {
+			IResource container = root.findMember(new Path(pathstring));
 
-		if (getContainerName().length() == 0) {
-			updateStatus("File container must be specified");
-			return;
+			fileName = getFileName();
+
+			if (pathstring.length() == 0) {
+				updateStatus("File container must be specified");
+				return;
+			}
+			if (container == null
+					|| (container.getType() & (IResource.PROJECT | IResource.FOLDER)) == 0) {
+				updateStatus("File container must exist");
+				return;
+			}
+			if (!container.isAccessible()) {
+				updateStatus("Project must be writable");
+				return;
+			}
 		}
-		if (container == null
-				|| (container.getType() 
-						& (IResource.PROJECT | IResource.FOLDER)) == 0) {
-			updateStatus("File container must exist");
-			return;
-		}
-		if (!container.isAccessible()) {
-			updateStatus("Project must be writable");
-			return;
-		}
+		
 		if (fileName.length() == 0) {
 			updateStatus("File name must be specified");
 			return;
@@ -196,17 +217,17 @@ public class AGXModelWizardPage extends WizardPage {
 		}
 		@SuppressWarnings("unused")
 		String mtype = modelType.getText();
-		if(mtype.isEmpty()){
+		if (mtype.isEmpty()) {
 			updateStatus("Please select a model template!");
 			return;
 		}
 		int dotLoc = fileName.lastIndexOf('.');
 		if (dotLoc != -1) {
 			String ext = fileName.substring(dotLoc + 1);
-//			if (ext.equalsIgnoreCase("uml") == false) {
-//				updateStatus("File extension must be \"uml\"");
-//				return;
-//			}
+			// if (ext.equalsIgnoreCase("uml") == false) {
+			// updateStatus("File extension must be \"uml\"");
+			// return;
+			// }
 		}
 		updateStatus(null);
 	}
