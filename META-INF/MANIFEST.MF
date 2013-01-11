@@ -17,3 +17,4 @@ Import-Package: org.eclipse.ui.dialogs,
  org.python.pydev.ui.wizards.project
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7,
  JavaSE-1.6
+Bundle-ActivationPolicy: lazy
