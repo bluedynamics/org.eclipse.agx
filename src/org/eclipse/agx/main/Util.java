@@ -47,7 +47,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.uml2.uml.Model;
 //import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.Profile;
-import org.eclipse.uml2.uml.ProfileApplication;
+//import org.eclipse.uml2.uml.ProfileApplication;
 import org.eclipse.uml2.uml.UMLPackage;
 
 //import com.sun.xml.internal.ws.util.StringUtils;
@@ -314,7 +314,7 @@ public class Util {
 					profresource.getContents(), UMLPackage.Literals.PACKAGE);
 
 			// slam it into the model
-			ProfileApplication app = model.getProfileApplication(profile);
+			//ProfileApplication app = model.getProfileApplication(profile);
 			String prname = profile.getQualifiedName();
 			
 			Profile app1 = model.getAppliedProfile(prname, true);

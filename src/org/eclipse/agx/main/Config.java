@@ -63,7 +63,7 @@ public class Config extends Object {
 	
 	public String [] getProfiles() {
 		String profiles = properties.getProperty("profiles", "");
-		String [] ret = util.str2Arr(profiles);
+		String [] ret = Util.str2Arr(profiles);
 		return ret;
 	}
 	

@@ -2,40 +2,30 @@ package org.eclipse.agx.wizards;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import org.eclipse.agx.main.Util;
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-//import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-//import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-//import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 
-//import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 
 /**
  * The "New" wizard page allows setting the container for the new file as well
@@ -215,20 +205,20 @@ public class AGXModelWizardPage extends WizardPage {
 			updateStatus("File name must be valid");
 			return;
 		}
-		@SuppressWarnings("unused")
+		//@SuppressWarnings("unused")
 		String mtype = modelType.getText();
 		if (mtype.isEmpty()) {
 			updateStatus("Please select a model template!");
 			return;
 		}
-		int dotLoc = fileName.lastIndexOf('.');
-		if (dotLoc != -1) {
-			String ext = fileName.substring(dotLoc + 1);
+		//int dotLoc = fileName.lastIndexOf('.');
+		//if (dotLoc != -1) {
+			//String ext = fileName.substring(dotLoc + 1);
 			// if (ext.equalsIgnoreCase("uml") == false) {
 			// updateStatus("File extension must be \"uml\"");
 			// return;
 			// }
-		}
+		//}
 		updateStatus(null);
 	}
 
