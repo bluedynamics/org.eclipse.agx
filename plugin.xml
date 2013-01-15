@@ -5,10 +5,10 @@
    <extension
          point="org.eclipse.ui.propertyPages">
       <page
-            name="AGX Properties"
-            nameFilter="*.uml"
             class="org.eclipse.agx.properties.AGXProperties"
-            id="org.eclipse.agx.properties.AGXPropertyPage">
+            id="org.eclipse.agx.properties.AGXPropertyPage"
+            name="AGX Properties"
+            nameFilter="*.uml">
          <enabledWhen>
             <instanceof
                   value="org.eclipse.core.resources.IFile">
@@ -20,6 +20,7 @@
    <extension
          point="org.eclipse.ui.popupMenus">
       <objectContribution
+            adaptable="true"
             id="org.eclipse.agx.menu.contribution1"
             nameFilter="*.uml"
             objectClass="org.eclipse.core.resources.IFile">
