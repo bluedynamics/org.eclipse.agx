@@ -8,69 +8,60 @@
             class="org.eclipse.agx.properties.AGXProperties"
             id="org.eclipse.agx.properties.AGXPropertyPage">
          <enabledWhen>
-            <adapt type="org.eclipse.core.resources.IFile">
-                <instanceof value="org.eclipse.core.resources.IFile"/>
-            </adapt>
+             <adapt type="org.eclipse.core.resources.IFile">
+                 <instanceof value="org.eclipse.core.resources.IFile"/>
+             </adapt>
          </enabledWhen>
       </page>
    </extension>
-   <extension
-         point="org.eclipse.ui.popupMenus">
+
+   <extension point="org.eclipse.ui.popupMenus">
       <objectContribution
             adaptable="true"
             id="org.eclipse.agx.menu.contribution1"
             nameFilter="*.uml"
             objectClass="org.eclipse.core.resources.IFile">
-         <menu
-               label="AGX"
+         <menu label="AGX"
                path="additions"
                id="org.eclipse.agx.menu.menu1">
-            <separator
-                  name="group1">
-            </separator>
+            <separator name="group1"></separator>
          </menu>
-         <action
-               label="generate"
-               class="org.eclipse.agx.menu.GenerateAction"
-               menubarPath="org.eclipse.agx.menu.menu1/group1"
-               enablesFor="1"
-               id="org.eclipse.agx.menu.generateAction">
+         <action label="generate"
+                 class="org.eclipse.agx.menu.GenerateAction"
+                 menubarPath="org.eclipse.agx.menu.menu1/group1"
+                 enablesFor="1"
+                 id="org.eclipse.agx.menu.generateAction">
          </action>
-         <action
-               label="import profiles"
-               class="org.eclipse.agx.menu.ImportProfilesAction"
-               menubarPath="org.eclipse.agx.menu.menu1/group1"
-               enablesFor="1"
-               id="org.eclipse.agx.menu.importProfilesAction">
+         <action label="import profiles"
+                 class="org.eclipse.agx.menu.ImportProfilesAction"
+                 menubarPath="org.eclipse.agx.menu.menu1/group1"
+                 enablesFor="1"
+                 id="org.eclipse.agx.menu.importProfilesAction">
          </action>
       </objectContribution>
    </extension>
-   <extension
-         point="org.eclipse.ui.preferencePages">
-      <page
-            class="org.eclipse.agx.preferences.AGXPreferencePage"
+
+   <extension point="org.eclipse.ui.preferencePages">
+      <page class="org.eclipse.agx.preferences.AGXPreferencePage"
             id="org.eclipse.agx.preferences.AGXPreferencePage"
             name="AGX">
       </page>
    </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.eclipse.agx.preferences.PreferenceInitializer">
+
+   <extension point="org.eclipse.core.runtime.preferences">
+      <initializer class="org.eclipse.agx.preferences.PreferenceInitializer">
       </initializer>
    </extension>
-   <extension
-         point="org.eclipse.ui.newWizards">
-      <category
-            id="org.eclipse.agx"
-            name="AGX">
+
+   <extension point="org.eclipse.ui.newWizards">
+      <category id="org.eclipse.agx"
+                name="AGX">
       </category>
-      <wizard
-            category="org.eclipse.agx"
-            class="org.eclipse.agx.wizards.AGXModelWizard"
-            icon="icons/agx_icon.png"
-            id="org.eclipse.agx.wizards.AGXModelWizard"
-            name="AGX Model">
+      <wizard category="org.eclipse.agx"
+              class="org.eclipse.agx.wizards.AGXModelWizard"
+              icon="icons/agx_icon.png"
+              id="org.eclipse.agx.wizards.AGXModelWizard"
+              name="AGX Model">
       </wizard>
    </extension>
 
