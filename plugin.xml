@@ -2,21 +2,18 @@
 <?eclipse version="3.4"?>
 <plugin>
 
-   <extension
-         point="org.eclipse.ui.propertyPages">
-      <page
+   <extension point="org.eclipse.ui.propertyPages">
+      <page name="AGX Properties"
+            nameFilter="*.uml"
             class="org.eclipse.agx.properties.AGXProperties"
-            id="org.eclipse.agx.properties.AGXPropertyPage"
-            name="AGX Properties"
-            nameFilter="*.uml">
+            id="org.eclipse.agx.properties.AGXPropertyPage">
          <enabledWhen>
-            <instanceof
-                  value="org.eclipse.core.resources.IFile">
-            </instanceof>
+            <adapt type="org.eclipse.core.resources.IFile">
+                <instanceof value="org.eclipse.core.resources.IFile"/>
+            </adapt>
          </enabledWhen>
       </page>
    </extension>
-   
    <extension
          point="org.eclipse.ui.popupMenus">
       <objectContribution
