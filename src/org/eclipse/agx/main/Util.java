@@ -203,52 +203,6 @@ public class Util {
 		return res;
 	}
 
-	public static void copyModel(String path, IContainer container,
-			String targetpath, IProgressMonitor monitor) throws IOException,
-			CoreException {
-		InputStream istream = Util.class.getResourceAsStream(MODEL_ROOT + path
-				+ "/manifest.txt");
-		
-		String ffp = new File(container.getLocationURI()).getAbsolutePath();
-//		String target = ffp.toOSString();
-		
-		
-		
-		
-		Manifest mani = new Manifest(istream);
-		String[] filenames = mani.getFilenames();
-		String modelname = mani.getModelname();
-		// do it via the new Manifest class
-		
-		// create the new directory
-		
-		// strip off ".uml"
-		targetpath = targetpath.replace(".uml", "");
-		String modelfile = (modelname + ".uml").replace(modelname, targetpath);
-
-		for (String fname :filenames) {
-			IPath inpath = new Path(fname);
-			String filepath = MODEL_ROOT + path + "/" + inpath;
-			InputStream fstream = Util.class.getResourceAsStream(filepath);
-			//IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-			Path opath = new Path(fname.replace(modelname, targetpath));
-			IFile outfile = container.getFile(opath);
-			outfile.create(fstream, 1, monitor);
-		}
-		applyProfiles(container, modelfile);
-
-		// update the model references inside .di and .notation
-		// XXX:for the moment i do it via string replace
-		// if there is a purist he might do this correctly with xml parsing ;)
-
-		String notationfile = (modelname + ".notation").replace(
-			modelname, targetpath);
-		fileStringReplace(container, notationfile, modelname + ".uml",
-				modelfile);
-		String difile = (modelname + ".di").replace(modelname, targetpath);
-		fileStringReplace(container, difile, modelname + ".notation",
-				notationfile);
-	}
 
 	public static String readFile(String path) throws IOException {
 		FileInputStream stream = new FileInputStream(new File(path));

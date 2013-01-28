@@ -178,7 +178,7 @@ public class AGX extends Object {
 
 	// creates a model from a template given by name
 	public void createModel(String template_name, IContainer container,
-			String targetpath, IProgressMonitor monitor) throws IOException,
+			String model_name, IProgressMonitor monitor) throws IOException,
 			CoreException {
 		String containerpath = new File(container.getLocationURI()).getAbsolutePath();
 
@@ -199,7 +199,7 @@ public class AGX extends Object {
     	
     	out.println("AGX: creating model from template "+template_name);
     	
-    	String command = generator + " -c " + template_name + " -o "+ containerpath;
+    	String command = generator + " -c " + template_name + " -o "+ containerpath + ' '+model_name;
     	
     	out.println("AGX: Import profiles");
 		out.println("Command: " + command);
