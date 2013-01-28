@@ -1,4 +1,0 @@
-python_egg:Python Egg
-plone_product:Plone Product
-dexterity_product:Dexterity Product
-dexterity_example:Dexterity Example
