@@ -208,6 +208,13 @@ public class Util {
 			CoreException {
 		InputStream istream = Util.class.getResourceAsStream(MODEL_ROOT + path
 				+ "/manifest.txt");
+		
+		String ffp = new File(container.getLocationURI()).getAbsolutePath();
+//		String target = ffp.toOSString();
+		
+		
+		
+		
 		Manifest mani = new Manifest(istream);
 		String[] filenames = mani.getFilenames();
 		String modelname = mani.getModelname();

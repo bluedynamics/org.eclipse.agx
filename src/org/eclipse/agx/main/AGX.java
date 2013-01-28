@@ -2,16 +2,22 @@ package org.eclipse.agx.main;
 
 import java.util.ArrayList;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.swt.graphics.Color;
 
@@ -19,12 +25,20 @@ public class AGX extends Object {
 	
 	private Util util;
 	private String [] configuredProfilesCached = null;
+	private String[] configuredTemplatesCached;
+	private String generator;
 	
 	public AGX() {
 		super();
 		util = new Util();
 	}
-    
+
+	public AGX(String generator) {
+		super();
+		this.generator=generator;
+		util = new Util();
+	}
+
 	/*
 	 * Return generator info.
 	 * 
@@ -116,6 +130,103 @@ public class AGX extends Object {
         }
     }
     
+	/*
+	 * Return templates names and paths known by recent AGX.
+	 * 
+	 * @param generator: path to AGX executable.
+	 */
+	public String[] getModelTemplates() {
+		if (configuredTemplatesCached != null) {
+			return configuredTemplatesCached;
+		}
+		try {
+			String command = generator + " -t -s";
+
+			Process p = Runtime.getRuntime().exec(command);
+			BufferedReader input = new BufferedReader(new InputStreamReader(
+					p.getInputStream()));
+			BufferedReader error = new BufferedReader(new InputStreamReader(
+					p.getErrorStream()));
+
+			ArrayList<String> configuredTemplates = new ArrayList<String>(0);
+			String line;
+			while ((line = input.readLine()) != null) {
+				configuredTemplates.add(line);
+			}
+			MessageConsoleStream out = null;
+			while ((line = error.readLine()) != null) {
+				if (out == null) {
+					MessageConsole console = getConsole();
+					out = console.newMessageStream();
+					Color red = new Color(null, 255, 0, 0);
+					out.setColor(red);
+				}
+				out.println(line);
+			}
+
+			error.close();
+			input.close();
+
+			configuredTemplatesCached = configuredTemplates
+					.toArray(new String[] {});
+			return configuredTemplatesCached;
+		} catch (Exception e) {
+			// err.printStackTrace();
+			return new String[] {};
+		}
+	}
+
+	// creates a model from a template given by name
+	public void createModel(String template_name, IContainer container,
+			String targetpath, IProgressMonitor monitor) throws IOException,
+			CoreException {
+		String containerpath = new File(container.getLocationURI()).getAbsolutePath();
+
+    	MessageConsole console = getConsole();
+    	console.activate();
+		
+    	MessageConsoleStream out = console.newMessageStream();
+		Color black = new Color(null, 0, 0, 0);
+		out.setColor(black);
+		
+		MessageConsoleStream info = console.newMessageStream();
+		Color green = new Color(null, 0, 200, 0);
+		info.setColor(green);
+		
+		MessageConsoleStream err = console.newMessageStream();
+		Color red = new Color(null, 255, 0, 0);
+    	err.setColor(red);
+    	
+    	out.println("AGX: creating model from template "+template_name);
+    	
+    	String command = generator + " -c " + template_name + " -o "+ containerpath;
+    	
+    	out.println("AGX: Import profiles");
+		out.println("Command: " + command);
+    	
+    	try {
+    		Process p = Runtime.getRuntime().exec(command);
+            BufferedReader input =
+                new BufferedReader(new InputStreamReader(p.getInputStream()));
+            BufferedReader error =
+                new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            
+            String line;
+            while ((line = input.readLine()) != null) {
+            	info.println(line);
+            }
+            while ((line = error.readLine()) != null) {
+            	err.println(line);
+            }
+            
+            input.close();
+            error.close();
+            out.println("");
+    	} catch (Exception e) {
+        	err.println("Error: " + e.toString());
+        	out.println("");
+        }
+	}
     /*
 	 * Call generator.
 	 * 

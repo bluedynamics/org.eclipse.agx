@@ -129,8 +129,9 @@ public class AGXModelWizard extends Wizard implements INewWizard {
 		}
 		final IFile file = container.getFile(new Path(fileName+".di"));
 
-		String template = page.templateName;
-		Util.copyModel(template, container, fileName, monitor);
+		String templateName = page.templateName;
+		page.agx.createModel(templateName, container, fileName, monitor);
+//		Util.copyModel(template, container, fileName, monitor);
 
 		monitor.worked(1);
 		monitor.setTaskName("Opening file for editing...");

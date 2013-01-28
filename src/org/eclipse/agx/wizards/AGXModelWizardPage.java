@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.eclipse.agx.main.AGX;
+import org.eclipse.agx.main.Config;
 import org.eclipse.agx.main.Util;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
@@ -45,6 +47,10 @@ public class AGXModelWizardPage extends WizardPage {
 	private String containerpath;
 
 	private HashMap<String, String> templmap;
+
+	private Config config;
+
+	public AGX agx;
 
 	/**
 	 * Constructor for SampleNewWizardPage.
@@ -110,16 +116,13 @@ public class AGXModelWizardPage extends WizardPage {
 			}
 		});
 
-		ArrayList<String> templates = null;
-		try {
-			templates = Util.listTemplateNames();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		//fill the list
+		initialize();
+		String[] templates = null;
+		templates=agx.getModelTemplates();
 
 		for (String entry : templates) {
-			String[] arr = entry.split(":");
+			String[] arr = entry.split("\t");
 			String templ = arr[0];
 			String templabel = templ;
 			if (arr.length > 1)
@@ -128,7 +131,6 @@ public class AGXModelWizardPage extends WizardPage {
 			templmap.put(templabel, templ);
 		}
 
-		initialize();
 		dialogChanged();
 		setControl(container);
 	}
@@ -158,8 +160,13 @@ public class AGXModelWizardPage extends WizardPage {
 			IStructuredSelection ssel = (IStructuredSelection) selection;
 			if (ssel.size() > 1)
 				return;
-			IResource res = extractSelection(selection);
-			containerpath=res.getFullPath().toString();
+			IResource resource = extractSelection(selection);
+			containerpath=resource.getFullPath().toString();
+			resource = extractSelection(selection);
+			config = new Config(resource.getLocation().toString());
+			containerpath=resource.getFullPath().toString();
+			this.agx=new AGX(config.getGenerator());
+
 		}
 		fileText.setText("model");
 	}

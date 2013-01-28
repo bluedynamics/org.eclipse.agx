@@ -1,10 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: AGX
+Bundle-Name: Agx
 Bundle-SymbolicName: org.eclipse.agx;singleton:=true
 Bundle-Version: 1.2.3
 Bundle-Activator: org.eclipse.agx.Activator
-Bundle-Vendor: BlueDynamics Alliance
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
@@ -12,9 +11,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.uml2.uml;bundle-version="3.0.1",
  org.eclipse.emf;bundle-version="2.5.0",
  org.eclipse.ui.ide
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7,
+ JavaSE-1.6
 Import-Package: org.eclipse.ui.dialogs,
  org.eclipse.ui.ide,
  org.python.pydev.ui.wizards.project
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7,
- JavaSE-1.6
 Bundle-ActivationPolicy: lazy
