@@ -2,7 +2,6 @@ package org.eclipse.agx.properties;
 
 import java.util.ArrayList;
 import org.eclipse.core.resources.IResource;
-// import org.eclipse.emf.common.util.URI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;

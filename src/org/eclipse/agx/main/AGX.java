@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
@@ -180,7 +179,9 @@ public class AGX extends Object {
 	public void createModel(String template_name, IContainer container,
 			String model_name, IProgressMonitor monitor) throws IOException,
 			CoreException {
-		String containerpath = new File(container.getLocationURI()).getAbsolutePath();
+		
+		String containerpath =
+			new File(container.getLocationURI()).getAbsolutePath();
 
     	MessageConsole console = getConsole();
     	console.activate();
@@ -199,7 +200,9 @@ public class AGX extends Object {
     	
     	out.println("AGX: creating model from template "+template_name);
     	
-    	String command = generator + " -c " + template_name + " -o "+ containerpath + ' '+model_name;
+    	String command = generator + " -c " +
+    					template_name + " -o " +
+    					containerpath + ' '+ model_name;
     	
     	out.println("AGX: Import profiles");
 		out.println("Command: " + command);

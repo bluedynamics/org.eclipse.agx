@@ -8,7 +8,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
-//import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.agx.main.AGX;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;

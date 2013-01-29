@@ -2,7 +2,6 @@ package org.eclipse.agx.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
-
 import org.eclipse.agx.Activator;
 
 /**

@@ -5,36 +5,17 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.WorkbenchException;
-//import org.eclipse.core.internal.resources.Resource;
-//import org.eclipse.core.internal.resources.WorkspaceRoot;
 import org.eclipse.core.runtime.*;
 import org.eclipse.jface.operation.*;
-
-//import java.io.ByteArrayInputStream;
-//import java.io.File;
 import java.io.IOException;
-//import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-//import java.net.JarURLConnection;
-//import java.net.URI;
 import java.net.URISyntaxException;
-//import java.net.URL;
-//import java.net.URLConnection;
-//import java.util.ArrayList;
-//import java.util.Enumeration;
-//import java.util.ResourceBundle;
-//import java.util.jar.JarFile;
-
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.CoreException;
-
 import org.eclipse.ui.*;
 import org.eclipse.ui.ide.IDE;
-//import org.eclipse.uml2.uml.UMLFactory;
-
-import org.eclipse.agx.main.Util;
 
 /**
  * This is a sample new wizard. Its role is to create a new file resource in the
@@ -131,7 +112,7 @@ public class AGXModelWizard extends Wizard implements INewWizard {
 
 		String templateName = page.templateName;
 		page.agx.createModel(templateName, container, fileName, monitor);
-//		Util.copyModel(template, container, fileName, monitor);
+		// Util.copyModel(template, container, fileName, monitor);
 
 		monitor.worked(1);
 		monitor.setTaskName("Opening file for editing...");

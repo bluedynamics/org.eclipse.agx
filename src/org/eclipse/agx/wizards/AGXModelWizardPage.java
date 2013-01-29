@@ -1,12 +1,8 @@
 package org.eclipse.agx.wizards;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-
 import org.eclipse.agx.main.AGX;
 import org.eclipse.agx.main.Config;
-import org.eclipse.agx.main.Util;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -27,7 +23,6 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-
 
 /**
  * The "New" wizard page allows setting the container for the new file as well
@@ -154,15 +149,13 @@ public class AGXModelWizardPage extends WizardPage {
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		label = new Label(container, SWT.NULL);
 		label.setText("");
-		
 
 		descriptionLabel = new Label(container, SWT.NULL);
 		descriptionLabel.setText("");
 		descriptionLabel.setLayoutData(gd);
-		
+
 		//reserve lines for the label (XXX: evil hack)
 		descriptionLabel.setText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-		
 
 		label = new Label(container, SWT.NULL);
 		label.setText("");
@@ -189,8 +182,8 @@ public class AGXModelWizardPage extends WizardPage {
 	 * Tests if the current workbench selection is a suitable container to use.
 	 */
 	private void initialize() {
-//		PythonProjectSourceFolder ff;
-//		IWrappedResource wr;
+		// PythonProjectSourceFolder ff;
+		// IWrappedResource wr;
 		if (selection != null && selection.isEmpty() == false
 				&& selection instanceof IStructuredSelection) {
 			IStructuredSelection ssel = (IStructuredSelection) selection;
@@ -230,7 +223,8 @@ public class AGXModelWizardPage extends WizardPage {
 				return;
 			}
 			if (container == null
-					|| (container.getType() & (IResource.PROJECT | IResource.FOLDER)) == 0) {
+					|| (container.getType() 
+							& (IResource.PROJECT | IResource.FOLDER)) == 0) {
 				updateStatus("File container must exist");
 				return;
 			}

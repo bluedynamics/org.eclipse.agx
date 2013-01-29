@@ -1,64 +1,30 @@
 package org.eclipse.agx.main;
 
-//import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-//import java.io.FileNotFoundException;
-//import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-//import java.io.StringReader;
-//import java.lang.reflect.Array;
-//import java.net.URL;
-//import java.nio.CharBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-//import java.util.Collections;
-//import java.util.Iterator;
-//import java.util.Scanner;
-
-//import org.eclipse.agx.Activator;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-//import org.eclipse.core.resources.IFolder;
-//import org.eclipse.core.resources.IResource;
-//import org.eclipse.core.resources.IWorkspaceRoot;
-//import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-//import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
-//import org.eclipse.emf.common.util.EList;
-//import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.common.util.WrappedException;
-//import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-//import org.eclipse.ui.dialogs.WizardNewFolderMainPage;
 import org.eclipse.uml2.uml.Model;
-//import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.Profile;
-//import org.eclipse.uml2.uml.ProfileApplication;
 import org.eclipse.uml2.uml.UMLPackage;
 
-//import com.sun.xml.internal.ws.util.StringUtils;
-
-//import org.eclipse.emf.ecore.resource.Resource;
-//import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-//import org.eclipse.emf.ecore.util.EcoreUtil;
-
-//import org.eclipse.emf.common.util.URI;
-
-//import org.eclipse.papyrus.umlutils.PackageUtil;
 
 public class Util {
 
