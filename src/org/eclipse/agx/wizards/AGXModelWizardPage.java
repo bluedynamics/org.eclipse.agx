@@ -52,6 +52,10 @@ public class AGXModelWizardPage extends WizardPage {
 
 	public AGX agx;
 
+	private Label descriptionLabel;
+
+	private HashMap<String, String> descriptionMap;
+
 	/**
 	 * Constructor for SampleNewWizardPage.
 	 * 
@@ -69,7 +73,11 @@ public class AGXModelWizardPage extends WizardPage {
 	 * @see IDialogPage#createControl(Composite)
 	 */
 	public void createControl(Composite parent) {
+		//map template labels to template name
 		templmap = new HashMap<String, String>();
+		//map template labels to descriptions
+		descriptionMap=new HashMap<String, String>();
+		
 		Composite container = new Composite(parent, SWT.NULL);
 		GridLayout layout = new GridLayout();
 		container.setLayout(layout);
@@ -101,18 +109,21 @@ public class AGXModelWizardPage extends WizardPage {
 		modelType.setLayoutData(gd);
 		modelType.select(0);
 		modelType.addSelectionListener(new SelectionListener() {
+			private void update(){
+				templateName = templmap.get(modelType.getText());
+				String description = descriptionMap.get(modelType.getText());
+				descriptionLabel.setText(description);
+			}
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				dialogChanged();
-				templateName = templmap.get(modelType.getText());
+				update();
 			}
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-				templateName = templmap.get(modelType.getText());
-
+				update();
 			}
 		});
 
@@ -125,11 +136,36 @@ public class AGXModelWizardPage extends WizardPage {
 			String[] arr = entry.split("\t");
 			String templ = arr[0];
 			String templabel = templ;
+			String description="";
 			if (arr.length > 1)
 				templabel = arr[1];
+			if (arr.length>2)
+				description=arr[2];
 			modelType.add(templabel);
 			templmap.put(templabel, templ);
+			description=description.replace("<br/>", "\n").replace("\\", "");
+			descriptionMap.put(templabel, description);
 		}
+
+		label = new Label(container, SWT.NULL);
+		label.setText("");
+
+		//description text
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		label = new Label(container, SWT.NULL);
+		label.setText("");
+		
+
+		descriptionLabel = new Label(container, SWT.NULL);
+		descriptionLabel.setText("");
+		descriptionLabel.setLayoutData(gd);
+		
+		//reserve lines for the label (XXX: evil hack)
+		descriptionLabel.setText("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+		
+
+		label = new Label(container, SWT.NULL);
+		label.setText("");
 
 		dialogChanged();
 		setControl(container);
