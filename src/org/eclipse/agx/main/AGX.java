@@ -246,9 +246,13 @@ public class AGX extends Object {
     	console.activate();
     	
     	// get relative path for the target in order to refresh it
+    	// we have to calculate target+(model\modelname)
+    	IPath modelcontainer = new Path(model).removeLastSegments(1);
+    	IPath targetpath = modelcontainer.append(new Path(target));
+    	
     	IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
     	IPath rootpath = root.getLocation();
-    	Path targetpath = new Path(target);
+
     	IPath relpath = targetpath.makeRelativeTo(rootpath);
     	IResource targetres = root.findMember(relpath);
     	
