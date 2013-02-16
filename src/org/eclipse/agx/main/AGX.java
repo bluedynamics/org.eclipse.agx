@@ -247,14 +247,12 @@ public class AGX extends Object {
     	
     	// get relative path for the target in order to refresh it
     	// we have to calculate target+(model\modelname)
-    	IPath modelcontainer = new Path(model).removeLastSegments(1);
-    	IPath targetpath = modelcontainer.append(new Path(target));
+    	IPath modelcontainerpath = new Path(model).removeLastSegments(1);
+    	IPath targetpath = modelcontainerpath.append(new Path(target));
     	
     	IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
     	IPath rootpath = root.getLocation();
-
     	IPath relpath = targetpath.makeRelativeTo(rootpath);
-    	IResource targetres = root.findMember(relpath);
     	
     	MessageConsoleStream out = console.newMessageStream();
 		Color black = new Color(null, 0, 0, 0);
@@ -322,14 +320,18 @@ public class AGX extends Object {
     		String command = generator + 
     		                 " " + model +
     		                 " -p " + profilesConcat +
-    		                 " -o " + target;
+    		                 " -o " + targetpath.toOSString();
     		
     		out.println("AGX: Invoke generator");
     		out.println("Command: " + command);
     		
     		Process p = Runtime.getRuntime().exec(command);
     		p.waitFor();
-    		
+
+        	IResource targetres = root.findMember(relpath);
+        	
+        	//if the target is not yet existent, refresh down from model path
+        	if (targetres==null) targetres=root.findMember(modelcontainerpath.makeRelativeTo(rootpath));
     		targetres.refreshLocal(IResource.DEPTH_INFINITE, null);
     		
             BufferedReader input =
