@@ -306,20 +306,10 @@ public class AGX extends Object {
     			}
     		}
     		
-    		String [] profilePathsArray = util.getProfilePaths(
-    			profiles, availableProfiles);
-    		
-    		String profilesConcat = "";
-    		for (int i = 0; i < profilePathsArray.length; i++) {
-    			profilesConcat += profilePathsArray[i];
-    			if (i != profilePathsArray.length - 1) {
-        			profilesConcat += ",";
-        		}
-    		}
-    		
+    		// the rest of the parameters are extracted by agx 
+    		// command from the .agx file
     		String command = generator + 
     		                 " " + model +
-    		                 " -p " + profilesConcat +
     		                 " -o " + targetpath.toOSString();
     		
     		out.println("AGX: Invoke generator");
