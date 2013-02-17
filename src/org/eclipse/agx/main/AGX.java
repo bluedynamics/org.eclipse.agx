@@ -5,6 +5,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
+
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleManager;
@@ -17,7 +19,11 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.graphics.Color;
 
 public class AGX extends Object {
@@ -247,25 +253,26 @@ public class AGX extends Object {
     	
     	// get relative path for the target in order to refresh it
     	// we have to calculate target+(model\modelname)
-    	IPath modelcontainerpath = new Path(model).removeLastSegments(1);
+    	final IPath modelcontainerpath = new Path(model).removeLastSegments(1);
     	IPath targetpath = modelcontainerpath.append(new Path(target));
     	
-    	IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-    	IPath rootpath = root.getLocation();
-    	IPath relpath = targetpath.makeRelativeTo(rootpath);
+    	final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+    	final IPath rootpath = root.getLocation();
+    	final IPath relpath = targetpath.makeRelativeTo(rootpath);
     	
-    	MessageConsoleStream out = console.newMessageStream();
+    	final MessageConsoleStream out = console.newMessageStream();
 		Color black = new Color(null, 0, 0, 0);
 		out.setColor(black);
 		
-		MessageConsoleStream info = console.newMessageStream();
+		final MessageConsoleStream info = console.newMessageStream();
 		Color green = new Color(null, 0, 200, 0);
 		info.setColor(green);
 		
-		MessageConsoleStream err = console.newMessageStream();
+		final MessageConsoleStream err = console.newMessageStream();
 		Color red = new Color(null, 255, 0, 0);
     	err.setColor(red);
     	
+		out.println("---------------------------------------");
     	out.println("Start AGX");
     	
     	if (generator.equals("")) {
@@ -312,33 +319,66 @@ public class AGX extends Object {
     		                 " " + model +
     		                 " -o " + targetpath.toOSString();
     		
-    		out.println("AGX: Invoke generator");
+    		out.println("AGX: Invoke generator anynchronously...");
     		out.println("Command: " + command);
     		
-    		Process p = Runtime.getRuntime().exec(command);
-    		p.waitFor();
 
-        	IResource targetres = root.findMember(relpath);
-        	
-        	//if the target is not yet existent, refresh down from model path
-        	if (targetres==null) targetres=root.findMember(modelcontainerpath.makeRelativeTo(rootpath));
-    		targetres.refreshLocal(IResource.DEPTH_INFINITE, null);
-    		
-            BufferedReader input =
+            final Process p = Runtime.getRuntime().exec(command);
+            
+            final BufferedReader input =
                 new BufferedReader(new InputStreamReader(p.getInputStream()));
-            BufferedReader error =
+            final BufferedReader error =
                 new BufferedReader(new InputStreamReader(p.getErrorStream()));
             
-            String line;
-            while ((line = input.readLine()) != null) {
-            	info.println(line);
-            }
-            while ((line = error.readLine()) != null) {
-            	err.println(line);
-            }
+            Job job = new Job(command){
+
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+//						p.waitFor();
+		            String line;
+		            int errors = 0;
+		            try {
+						while ((line = input.readLine()) != null) {
+							info.println(line);
+						}
+			            while ((line = error.readLine()) != null) {
+			            	err.println(line);
+			            	errors++;
+			            }
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+		    		try {
+		    			if (errors==0){
+				    		out.println("AGX: command complete, refreshing project...");
+				        	IResource targetres = root.findMember(relpath);
+				        	
+				        	//if the target is not yet existent, refresh down from model path
+				        	if (targetres==null) targetres=root.findMember(modelcontainerpath.makeRelativeTo(rootpath));
+							targetres.refreshLocal(IResource.DEPTH_INFINITE, null);
+				    		out.println("AGX: project refreshed, READY!");
+		    			} else {
+		    				out.println("Errors occured, please check traceback");
+		    			}
+					} catch (CoreException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		            try {
+						input.close();
+			            error.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					return new Status(0,"agx","agx");
+				}
+            	
+            };
+            job.schedule(0);
             
-            input.close();
-            error.close();
             out.println("");
         } catch (Exception e) {
         	err.println("Error: " + e.toString());
