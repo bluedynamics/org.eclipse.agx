@@ -5,8 +5,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
-
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleManager;
@@ -23,7 +21,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.graphics.Color;
 
 public class AGX extends Object {
@@ -350,12 +347,16 @@ public class AGX extends Object {
 						e1.printStackTrace();
 					}
 		    		try {
-		    			if (errors==0){
-				    		out.println("AGX: command complete, refreshing project...");
+		    			if (errors == 0) {
+				    		out.println(
+				    			"AGX: command complete, refreshing project...");
 				        	IResource targetres = root.findMember(relpath);
-				        	
-				        	//if the target is not yet existent, refresh down from model path
-				        	if (targetres==null) targetres=root.findMember(modelcontainerpath.makeRelativeTo(rootpath));
+				        	// if the target is not yet existent, refresh down
+				        	// from model path
+				        	if (targetres == null) {
+				        		targetres = root.findMember(
+				        			modelcontainerpath.makeRelativeTo(rootpath));
+				        	}
 							targetres.refreshLocal(IResource.DEPTH_INFINITE, null);
 				    		out.println("AGX: project refreshed, READY!");
 		    			} else {
@@ -372,13 +373,10 @@ public class AGX extends Object {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-
 					return new Status(0,"agx","agx");
 				}
-            	
             };
             job.schedule(0);
-            
             out.println("");
         } catch (Exception e) {
         	err.println("Error: " + e.toString());
