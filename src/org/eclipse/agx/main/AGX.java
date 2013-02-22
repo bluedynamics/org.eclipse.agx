@@ -292,7 +292,7 @@ public class AGX extends Object {
     	}
     	
     	try {
-    		out.println("AGX: Read configured profiles");
+    		out.println("AGX: Reading configured profiles");
     		String [] availableProfiles = getConfiguredProfiles(generator);
     		String [] availableProfileNames = 
     			util.getProfileNames(availableProfiles);
@@ -319,7 +319,7 @@ public class AGX extends Object {
     		                 " " + model +
     		                 " -o " + targetpath.toOSString();
     		
-    		out.println("AGX: Invoke generator anynchronously...");
+    		out.println("AGX: Invoking generator asynchronously...");
     		out.println("Command: " + command);
     		
 

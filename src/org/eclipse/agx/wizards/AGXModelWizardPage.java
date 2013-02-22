@@ -9,6 +9,7 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
@@ -196,6 +197,8 @@ public class AGXModelWizardPage extends WizardPage {
 			containerpath=resource.getFullPath().toString();
 			this.agx=new AGX(config.getGenerator());
 
+		} else {
+			MessageDialog.openError(null, "Selection missing", "Please select a folder or project before using the wizard");
 		}
 		fileText.setText("model");
 	}
