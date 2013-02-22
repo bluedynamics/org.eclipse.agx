@@ -195,6 +195,9 @@ public class AGXModelWizardPage extends WizardPage {
 			resource = extractSelection(selection);
 			config = new Config(resource.getLocation().toString());
 			containerpath=resource.getFullPath().toString();
+			if (config.getGenerator()==null || config.getGenerator().trim() == ""){
+				MessageDialog.openError(null, "AGX command line not configured", "Please configure the AGX command line in Preferences -> AGX -> AGX executable");
+			}
 			this.agx=new AGX(config.getGenerator());
 
 		} else {
