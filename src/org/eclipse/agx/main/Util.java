@@ -201,11 +201,9 @@ public class Util {
 				.getLocation().toOSString();
 		IFile file = container.getFile(new Path(modelpath));
 		String fullpath = file.getLocation().toOSString();
-		String containerpath = container.getLocation().toOSString();
 		Config conf = new Config(fullpath);
 		String generator = conf.getGenerator();
 		String[] profiles = conf.getProfiles();
-		conf.setTarget(containerpath);
 
 		conf.update();
 		AGX agx = new AGX();

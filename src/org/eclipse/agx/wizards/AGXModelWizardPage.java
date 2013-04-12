@@ -152,7 +152,7 @@ public class AGXModelWizardPage extends WizardPage {
 		label.setText("");
 
 		descriptionLabel = new Label(container, SWT.NULL);
-		descriptionLabel.setText("");
+		descriptionLabel.setText("Loading template list, this can need some seconds...");
 		descriptionLabel.setLayoutData(gd);
 
 		//reserve lines for the label (XXX: evil hack)
